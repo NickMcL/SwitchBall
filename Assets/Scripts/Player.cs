@@ -3,12 +3,12 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	public Rigidbody			rigid;
+	public Rigidbody2D			rigid;
 	public bool					inAir;
 	public float				speed = 4.0f;
 	// Use this for initialization
 	void Start () {
-		rigid = GetComponent<Rigidbody>();
+		rigid = GetComponent<Rigidbody2D>();
 		inAir = false;
 	}
 	
@@ -17,7 +17,6 @@ public class Player : MonoBehaviour {
 			transform.Translate(Vector3.up * 60 * Time.deltaTime, Space.World);
 			inAir = true;
 		} 
-
 	}
 
 	void FixedUpdate() {
@@ -40,7 +39,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other) {
-		if (other.collider.tag == "Ground") {
+		if (other.collider.tag == "LevelTerrain") {
 			inAir = false;
 		}
 	}
