@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	//container for players
 	private gameType _mode;
 	private List<TeamType> teams;
+	public List<GameObject> playergo;
 	private List<PlayerManager> players;
 
 	//Which team holds the ball
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour {
 	void InitiatePlayers(gameType gmtype){
 		if (gmtype == gameType.FFA) {
 			for (int i = 0; i < 4; i++) {
-				GameObject go = Instantiate (player);
+				GameObject go = Instantiate (playergo[i]);
 				go.transform.position = startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.Team = teams [i];
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour {
 			int teamA = 0;
 			int teamB = 0;
 			for (int i = 0; i < 4; i++) {
-				GameObject go = Instantiate (player);
+				GameObject go = Instantiate (playergo[i]);
 				go.transform.position = startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.StartPosition = startPosition [i];
@@ -109,7 +110,7 @@ public class GameManager : MonoBehaviour {
 			int teamA = 0;
 			int teamB = 0;
 			for (int i = 0; i < 4; i++) {
-				GameObject go = Instantiate (player);
+				GameObject go = Instantiate (playergo[i]);
 				go.transform.position =startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.StartPosition = startPosition [i];
