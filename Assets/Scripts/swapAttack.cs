@@ -23,13 +23,19 @@ public class swapAttack : MonoBehaviour {
 				//when it's 1v1v1v1 changes it to 1v3
 				if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
 					GameManager.Instance.changeToOvT (_toPlayer);
-				} //else just swap the team
+				} 
 				else {
-					_toPlayer.ChangeTeam (FromPlayer.Team);
-					if (_toPlayer.Team == GameManager.TeamType.A)
-						GameManager.Instance.changeToFFA ();
-					if (_toPlayer.Team == GameManager.TeamType.B)
-						GameManager.Instance.Mode = GameManager.gameType.TvT;
+					_toPlayer.ChangeTeam (_fromPlayer.Team);
+					if(GameManager.Instance.Mode==GameManager.gameType.TvT){
+						
+						GameManager.Instance.Mode = GameManager.gameType.OvT;
+					}if (GameManager.Instance.Mode == GameManager.gameType.OvT) {
+						
+						//checkif there are 4 team
+						if(!GameManager.Instance.returnToFFA()){
+							GameManager.Instance.Mode = GameManager.gameType.TvT;
+						}
+					}
 				}
 			}
 			//if hit teammate

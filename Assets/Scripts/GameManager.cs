@@ -160,4 +160,15 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public bool returnToFFA(){
+		for (int i = 1; i < 4; i++) {
+			if (players [i].GetComponent<PlayerManager> ().Team != players [0].GetComponent<PlayerManager> ().Team)
+				return false;
+			else
+				continue;
+		}
+		changeToFFA ();
+		return true;
+	}
+
 }
