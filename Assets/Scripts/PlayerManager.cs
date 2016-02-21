@@ -7,6 +7,9 @@ public class PlayerManager : MonoBehaviour {
 	private   GameManager.TeamType _team;
 
 
+	public Vector3 StartPosition{ get; set;}
+
+
 	public int Score{
 		get{ return _score;}
 		set{ _score = value;}
@@ -19,6 +22,25 @@ public class PlayerManager : MonoBehaviour {
 	void Start(){
 		
 	}
+
+	void OnCollisionEnter2D(Collision2D coll){
+		if (coll.gameObject.tag == "OddBall") {
+			OddBall.Instance.OnHitPlayer (this);
+		}
+		if (coll.gameObject.tag == "Boundary") {
+			if (OddBall.Instance.BelongTo == this) {
+				OddBall.Instance.Initial ();
+			}
+			Invoke ("respawn", 3f);
+		}
+		if (coll.gameObject.tag == "Bullet") {
+			if (OddBall.Instance.BelongTo == this) {
+				OddBall.Instance.Initial ();
+			}
+			respawn ();
+		}
+	}
+
 	public void output(){
 		Debug.Log ("Team:" + Team + "Score" + Score);
 	}
@@ -26,5 +48,10 @@ public class PlayerManager : MonoBehaviour {
 	public void ChangeTeam(GameManager.TeamType teamtype){
 		Team = teamtype;
 	}
+	public void respawn(){
+		this.transform.position = StartPosition;
+
+	}
+
 
 }
