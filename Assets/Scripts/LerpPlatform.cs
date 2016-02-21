@@ -16,8 +16,9 @@ public class LerpPlatform : MonoBehaviour {
 
     void Update() {
         float u = (Time.time - startTime) / duration;
-        this.transform.position = Vector2.Lerp(start, end, (Time.time - startTime) / duration);
-        
+
+        this.transform.position = Vector2.Lerp(start, end, u);
+
         if (u >= 1.0f)
         {
             Vector2 temp = end;
