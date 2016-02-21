@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour {
 		if (gmtype == gameType.FFA) {
 			for (int i = 0; i < 4; i++) {
 				GameObject go = Instantiate (player);
-				go.transform.position = new Vector3 (-10+5*i, 0, 0);
+				go.transform.position = new Vector3 (-5+3*i, 0, 0);
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.Team = teams [i];
 				//Debug.Log (team.Team);
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour {
 			int teamB = 0;
 			for (int i = 0; i < 4; i++) {
 				GameObject go = Instantiate (player);
-				go.transform.position = new Vector3 (-10+5*i, 0, 0);
+				go.transform.position = new Vector3 (-5+3*i, 0, 0);
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				if (teamA == 2) {
 					team.Team = TeamType.B;
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour {
 			int teamB = 0;
 			for (int i = 0; i < 4; i++) {
 				GameObject go = Instantiate (player);
-				go.transform.position = new Vector3 (-10+5*i, 0, 0);
+				go.transform.position = new Vector3 (-5+3*i, 0, 0);
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				if (teamA == 1) {
 					team.Team = TeamType.B;

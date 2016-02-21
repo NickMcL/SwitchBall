@@ -11,7 +11,7 @@ public class swapAttack : MonoBehaviour {
 		set{ _fromPlayer = value;}
 	}
 
-	void OnCollisionEnter(Collision coll){
+	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "Player"&&!changed) {
 			_toPlayer = coll.gameObject.GetComponent<PlayerManager> ();
 			//hit itself return nothing
