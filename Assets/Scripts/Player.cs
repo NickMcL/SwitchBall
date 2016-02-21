@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 	public bool					inAir;
 	public float				speed = 4.0f;
 	public int player = Controls.player1;
-	public bool useController = false;
+	public bool useController;
 	const KeyCode kMicrosoftAButton = KeyCode.Joystick1Button0;
 	public bool has_triggered = false;
 	public bool right_trigger_down = false;
@@ -22,6 +22,12 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update () {
+		if (Input.GetKeyDown (KeyCode.Q)) {
+			useController = true;
+		}
+		if (Input.GetKeyDown (KeyCode.P)) {
+			useController = false;
+		}
 		updateMovement();
         updateJump();
 	}
@@ -61,7 +67,7 @@ public class Player : MonoBehaviour {
 				inAir = true;
 				print ("jump!");
 			}
-		} 
+		}
 		else {
 			if (Input.GetKeyDown (JUMP_KEY)) {
 				transform.Translate (new Vector3 (0, 1));
