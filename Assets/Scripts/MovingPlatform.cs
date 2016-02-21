@@ -21,12 +21,12 @@ public class MovingPlatform : MonoBehaviour {
 
         if (horizontal)
         {
-            rigid.constraints = RigidbodyConstraints2D.FreezePositionY;
+            rigid.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             forwardDirection = Vector2.right;
         }
         else
         {
-            rigid.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             forwardDirection = Vector2.up;
         }
 
