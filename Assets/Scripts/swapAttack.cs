@@ -25,9 +25,11 @@ public class swapAttack : MonoBehaviour {
 					GameManager.Instance.changeToOvT (_toPlayer);
 				} //else just swap the team
 				else {
-					GameManager.TeamType temp = _toPlayer.Team;
 					_toPlayer.ChangeTeam (FromPlayer.Team);
-					_fromPlayer.ChangeTeam (temp);
+					if (_toPlayer.Team == GameManager.TeamType.A)
+						GameManager.Instance.changeToFFA ();
+					if (_toPlayer.Team == GameManager.TeamType.B)
+						GameManager.Instance.Mode = GameManager.gameType.TvT;
 				}
 			}
 			//if hit teammate
@@ -35,6 +37,8 @@ public class swapAttack : MonoBehaviour {
 				//make teammate to enemy
 				if (_toPlayer.Team == GameManager.TeamType.A) 
 					_toPlayer.ChangeTeam (GameManager.TeamType.B);
+				
+
 				else _toPlayer.Team = GameManager.TeamType.A;
 
 				//change the gamemode

@@ -149,4 +149,15 @@ public class GameManager : MonoBehaviour {
 		Mode = GameManager.gameType.OvT;
 	}
 
+	public void changeToFFA(){
+		for (int i = 0; i < 4; i++) {
+			
+			PlayerManager team = players[i].GetComponent<PlayerManager> ();
+			team.Team = teams [i];
+
+		}
+		Mode = GameManager.gameType.FFA;
+
+	}
+
 }
