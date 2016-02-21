@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour {
 
 	public Vector3 StartPosition{ get; set;}
 
-
+    
 	public int Score{
 		get{ return _score;}
 		set{ _score = value;}
@@ -22,6 +22,11 @@ public class PlayerManager : MonoBehaviour {
 	void Start(){
 		
 	}
+
+    void Update()
+    {
+
+    }
 
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "OddBall") {
