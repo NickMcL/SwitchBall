@@ -38,7 +38,7 @@ public class Player : MonoBehaviour {
 		rigid.velocity = vel_vec;
 	}
 
-	void OnCollisionEnter(Collision other) {
+	void OnCollisionEnter2D(Collision2D other) {
 		if (other.collider.tag == "LevelTerrain") {
 			inAir = false;
 		}

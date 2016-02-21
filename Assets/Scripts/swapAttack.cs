@@ -11,7 +11,7 @@ public class swapAttack : MonoBehaviour {
 		set{ _fromPlayer = value;}
 	}
 
-	void OnCollisionEnter(Collision coll){
+	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "Player"&&!changed) {
 			_toPlayer = coll.gameObject.GetComponent<PlayerManager> ();
 			//hit itself return nothing
@@ -23,11 +23,19 @@ public class swapAttack : MonoBehaviour {
 				//when it's 1v1v1v1 changes it to 1v3
 				if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
 					GameManager.Instance.changeToOvT (_toPlayer);
-				} //else just swap the team
+				} 
 				else {
-					GameManager.TeamType temp = _toPlayer.Team;
-					_toPlayer.ChangeTeam (FromPlayer.Team);
-					_fromPlayer.ChangeTeam (temp);
+					_toPlayer.ChangeTeam (_fromPlayer.Team);
+					if(GameManager.Instance.Mode==GameManager.gameType.TvT){
+						
+						GameManager.Instance.Mode = GameManager.gameType.OvT;
+					}if (GameManager.Instance.Mode == GameManager.gameType.OvT) {
+						
+						//checkif there are 4 team
+						if(!GameManager.Instance.returnToFFA()){
+							GameManager.Instance.Mode = GameManager.gameType.TvT;
+						}
+					}
 				}
 			}
 			//if hit teammate
@@ -35,6 +43,8 @@ public class swapAttack : MonoBehaviour {
 				//make teammate to enemy
 				if (_toPlayer.Team == GameManager.TeamType.A) 
 					_toPlayer.ChangeTeam (GameManager.TeamType.B);
+				
+
 				else _toPlayer.Team = GameManager.TeamType.A;
 
 				//change the gamemode
