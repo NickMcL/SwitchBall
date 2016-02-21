@@ -69,7 +69,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 		else {
-			if (Input.GetKeyDown (JUMP_KEY)) {
+			if (Input.GetKeyDown (JUMP_KEY) && (!inAir)) {
 				transform.Translate (new Vector3 (0, 1));
 				inAir = true;
 				print ("jump!");
