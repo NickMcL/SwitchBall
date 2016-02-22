@@ -47,7 +47,7 @@ public class PlayerManager : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Bullet")
         {
-            if (coll.gameObject.GetComponent<Bullet>().bullet_team == Team)
+            if (coll.gameObject.GetComponent<Bullet>().source_player_id == GetComponent<PlayerManager>().player_id)
             {
                 return;
             }

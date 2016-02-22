@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = this.GetComponent<Rigidbody2D>();
-        bullet_team = GameManager.playergo[player_id].GetComponent<Player>().Team;
+        bullet_team = GameManager.Instance.playergo[source_player_id].GetComponent<PlayerManager>().Team;
         if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
             this.GetComponent<SpriteRenderer>().color = TeamColors.NO_TEAM;
         } else {
@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour {
             return;
         }
         if (coll.gameObject.tag == "Player" &&
-                coll.gameObject.GetComponent<Player>().player_id == player_id) {
+                coll.gameObject.GetComponent<PlayerManager>().player_id == source_player_id) {
             return;
         }
         Destroy(this.gameObject);

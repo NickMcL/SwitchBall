@@ -142,8 +142,10 @@ public class GameManager : MonoBehaviour {
 		foreach (PlayerManager pm in players) {
 			if (OddBall.Instance.BelongTo == null)
 				return;
-			if (pm.Team == OddBall.Instance.BelongTo.Team)
-				pm.Score += 5;
+            if (pm == OddBall.Instance.BelongTo)
+                pm.Score += 2;
+            else if (pm.Team == OddBall.Instance.BelongTo.Team)
+                pm.Score += 1;
 			
 		}
 	}
