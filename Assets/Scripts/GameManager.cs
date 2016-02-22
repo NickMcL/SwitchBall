@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 	//references for initializing the game
 	public GameObject player;
 	public gameType startType;
+	public List<Vector3> startPosition;
 
 	//for test
 	public GameObject swap;
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour {
 	private gameType _mode;
 	private List<TeamType> teams;
 	private List<PlayerManager> players;
+
 	//Which team holds the ball
 
 	// Use this for initialization
@@ -40,7 +42,6 @@ public class GameManager : MonoBehaviour {
 		InitiateTeams ();
 		InitiatePlayers (startType);
 		InvokeRepeating ("UpdateScore", 1f, 1f);
-		OddBall.Instance.BelongTo = players [0];
 
 		//test
 		swap.GetComponent<swapAttack>().FromPlayer=players[0];
@@ -70,9 +71,10 @@ public class GameManager : MonoBehaviour {
 		if (gmtype == gameType.FFA) {
 			for (int i = 0; i < 4; i++) {
 				GameObject go = Instantiate (player);
-				go.transform.position = new Vector3 (-5+3*i, 0, 0);
+				go.transform.position = startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.Team = teams [i];
+				team.StartPosition = startPosition [i];
 				//Debug.Log (team.Team);
 				players.Add (team);
 			}
@@ -81,8 +83,9 @@ public class GameManager : MonoBehaviour {
 			int teamB = 0;
 			for (int i = 0; i < 4; i++) {
 				GameObject go = Instantiate (player);
-				go.transform.position = new Vector3 (-5+3*i, 0, 0);
+				go.transform.position = startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
+				team.StartPosition = startPosition [i];
 				if (teamA == 2) {
 					team.Team = TeamType.B;
 					teamB++;
@@ -107,8 +110,9 @@ public class GameManager : MonoBehaviour {
 			int teamB = 0;
 			for (int i = 0; i < 4; i++) {
 				GameObject go = Instantiate (player);
-				go.transform.position = new Vector3 (-5+3*i, 0, 0);
+				go.transform.position =startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
+				team.StartPosition = startPosition [i];
 				if (teamA == 1) {
 					team.Team = TeamType.B;
 					teamB++;
@@ -124,6 +128,7 @@ public class GameManager : MonoBehaviour {
 						teamB++;
 					}
 				}
+
 				players.Add (team);
 			}
 
@@ -133,6 +138,8 @@ public class GameManager : MonoBehaviour {
 	//Update the score
 	void UpdateScore(){
 		foreach (PlayerManager pm in players) {
+			if (OddBall.Instance.BelongTo == null)
+				return;
 			if (pm.Team == OddBall.Instance.BelongTo.Team)
 				pm.Score += 5;
 			
