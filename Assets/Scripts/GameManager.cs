@@ -30,8 +30,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//teamtypes
-	public enum TeamType{A,B,C,D,NONE}
-	public enum gameType{FFA,TvT,OvT}
+	public enum TeamType {A,B,C,D,NONE}
+	public enum gameType {FFA,TvT,OvT}
 
 	void Awake(){
 		Instance = this;
