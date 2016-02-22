@@ -70,12 +70,12 @@ public class PlayerManager : MonoBehaviour {
 		this.transform.position = StartPosition;
 
 	}
+
     public void setColor()
-    {   if (GameManager.Instance.Mode == GameManager.gameType.FFA)
+    {
+        if (GameManager.Instance.Mode == GameManager.gameType.FFA)
             render.color = TeamColors.NO_TEAM;
-        else  render.color = TeamColors.TEAM_COLOR_MAP[Team];
+        else
+            render.color = TeamColors.TEAM_COLOR_MAP[Team];
     }
-	
-
-
 }
