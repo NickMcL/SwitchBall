@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerManager : MonoBehaviour {
 
 	private int _score;
-	private   GameManager.TeamType _team;
+	private GameManager.TeamType _team;
 
 
 	public Vector3 StartPosition{ get; set;}

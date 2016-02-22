@@ -54,6 +54,7 @@ public class FireBullet : MonoBehaviour {
     IEnumerator fireBullets() {
         while (true) {
             GameObject new_bullet = Instantiate(bullet_prefab) as GameObject;
+            new_bullet.GetComponent<Bullet>().bullet_team = this.GetComponent<PlayerManager>().Team;
             new_bullet.GetComponent<Bullet>().movement_vector = fire_bullet_vector;
             new_bullet.transform.position = this.transform.position;
             yield return new WaitForSeconds(fire_bullet_delay);
