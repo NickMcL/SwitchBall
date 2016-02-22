@@ -68,7 +68,4 @@ public class PlayerManager : MonoBehaviour {
 		if (Team == GameManager.TeamType.D)
 			render.color = Color.green;
 	}
-	
-
-
 }
