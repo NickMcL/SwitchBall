@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour {
     public int player_id;
     public Sprite noteam, redteam, blueteam;
 	public bool death;
+	public bool change;
 
     public Vector3 StartPosition{ get; set;}
 
@@ -26,6 +27,7 @@ public class PlayerManager : MonoBehaviour {
 	void Start(){
 		death = false;
 		render = this.GetComponent<SpriteRenderer> ();
+		change = true;
 	}
 
 
@@ -71,8 +73,47 @@ public class PlayerManager : MonoBehaviour {
 		Debug.Log ("Team:" + Team + "Score" + Score+"id"+player_id);
 	}
 
-	public void ChangeTeam(GameManager.TeamType teamtype){
-		Team = teamtype;
+	public void ChangeTeam(swapAttack attack){
+		if (change == false)
+			return;
+			
+		change = false;
+		//if hit enemy
+		if (attack.bullet_team != this.Team) {
+			//when it's 1v1v1v1 changes it to 1v3
+			if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
+				GameManager.Instance.changeToOvT (this);
+			} else {
+				this.Team = attack.bullet_team;
+				if (GameManager.Instance.Mode == GameManager.gameType.TvT) {
+
+					GameManager.Instance.Mode = GameManager.gameType.OvT;
+				}
+				if (GameManager.Instance.Mode == GameManager.gameType.OvT) {
+
+					//checkif there are 4 team
+					if (!GameManager.Instance.returnToFFA ()) {
+						GameManager.Instance.Mode = GameManager.gameType.TvT;
+					}
+				}
+			}
+		}
+			//if hit teammate
+			else {
+			//make teammate to enemy
+			if (this.Team == GameManager.TeamType.A)
+				this.Team = GameManager.TeamType.B;
+			else
+				this.Team = GameManager.TeamType.A;
+
+			//change the gamemode
+			if (GameManager.Instance.Mode == GameManager.gameType.TvT) {
+				GameManager.Instance.Mode = GameManager.gameType.OvT;
+			} else
+				GameManager.Instance.Mode = GameManager.gameType.TvT;
+
+		}
+		Invoke ("resetChange", 1.5f);
 	}
 	public void respawn(){
 		this.transform.position = StartPosition;
@@ -93,4 +134,7 @@ public class PlayerManager : MonoBehaviour {
             render.sprite = blueteam;
         }
     }
+	void resetChange(){
+		change = true;
+	}
 }

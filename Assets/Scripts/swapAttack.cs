@@ -28,7 +28,7 @@ public class swapAttack : MonoBehaviour {
         if (coll.gameObject.tag == "Player" &&
                 coll.gameObject.GetComponent<PlayerManager>().player_id != source_player_id) {
             print("Hit player " + coll.gameObject.GetComponent<PlayerManager>().player_id);
-            // coll.gameObject.GetComponent<PlayerManager>().swapTeam();
+			coll.gameObject.GetComponent<PlayerManager>().ChangeTeam(this);
         }
     }
 }

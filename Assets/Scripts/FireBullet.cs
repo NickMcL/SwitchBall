@@ -101,6 +101,7 @@ public class FireBullet : MonoBehaviour {
         new_swap_attack.GetComponent<swapAttack>().source_player_id = this.GetComponent<PlayerManager>().player_id;
         new_swap_attack.GetComponent<swapAttack>().movement_vector = fire_bullet_vector;
         new_swap_attack.transform.position = this.transform.position;
+		new_swap_attack.GetComponent<swapAttack> ().bullet_team = this.GetComponent<PlayerManager> ().Team;
         fired_swap = true;
     }
 }
