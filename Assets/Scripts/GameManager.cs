@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviour {
 
 
@@ -151,7 +152,8 @@ public class GameManager : MonoBehaviour {
                 pm.Score += 2;
             else if (pm.Team == OddBall.Instance.BelongTo.Team)
                 pm.Score += 1;
-
+			if (pm.Score >= 50)
+				pm.Score = 50;
         }
     }
 
@@ -187,5 +189,8 @@ public class GameManager : MonoBehaviour {
         changeToFFA();
         return true;
     }
-
+	public void winTheGame(PlayerManager pm){
+		PlayerPrefs.SetInt ("winner", pm.player_id);
+		SceneManager.LoadScene ("_Scene_End");
+	}
 }

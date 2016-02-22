@@ -31,6 +31,9 @@ public class PlayerManager : MonoBehaviour {
 
 	void Update(){
 		setColor();
+		if (Score == 50) {
+			GameManager.Instance.winTheGame (this);
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
