@@ -96,8 +96,8 @@ public class FireBullet : MonoBehaviour {
         }
 
         GameObject new_swap_attack = Instantiate(swap_attack_prefab) as GameObject;
-        new_swap_attack.GetComponent<SwapAttack>().source_player_id = this.GetComponent<PlayerManager>().player_id;
-        new_swap_attack.GetComponent<SwapAttack>().movement_vector = fire_bullet_vector;
+        new_swap_attack.GetComponent<swapAttack>().source_player_id = this.GetComponent<PlayerManager>().player_id;
+        new_swap_attack.GetComponent<swapAttack>().movement_vector = fire_bullet_vector;
         new_swap_attack.transform.position = this.transform.position;
         fired_swap = true;
     }
