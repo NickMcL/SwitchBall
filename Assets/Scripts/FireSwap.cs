@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FireBullet : MonoBehaviour {
-    const KeyCode FIRE_LEFT_KEY = KeyCode.LeftArrow;
-    const KeyCode FIRE_DOWN_KEY = KeyCode.DownArrow;
-    const KeyCode FIRE_RIGHT_KEY = KeyCode.RightArrow;
-    const KeyCode FIRE_UP_KEY = KeyCode.UpArrow;
+public class FireSwap : MonoBehaviour {
+    const KeyCode FIRE_LEFT_KEY = KeyCode.LeftArrow | KeyCode.LeftShift;
+    const KeyCode FIRE_DOWN_KEY = KeyCode.DownArrow | KeyCode.LeftShift;
+    const KeyCode FIRE_RIGHT_KEY = KeyCode.RightArrow | KeyCode.LeftShift;
+    const KeyCode FIRE_UP_KEY = KeyCode.UpArrow | KeyCode.LeftShift;
 
     public float fire_bullet_delay = 0.3f;
     float stop_bullet_fire_time;
@@ -17,7 +17,7 @@ public class FireBullet : MonoBehaviour {
     // Use this for initialization
     void Start () {
         fire_bullets = null;
-        bullet_prefab = Resources.Load("Bullet");
+        bullet_prefab = Resources.Load("Swap");
         stop_bullet_fire_time = -fire_bullet_delay;
 	}
 
@@ -57,7 +57,6 @@ public class FireBullet : MonoBehaviour {
             new_bullet.GetComponent<Bullet>().source_player_id = this.GetComponent<PlayerManager>().player_id;
             new_bullet.GetComponent<Bullet>().movement_vector = fire_bullet_vector;
             new_bullet.transform.position = this.transform.position;
-            new_bullet.GetComponent<Bullet>().bullet_team = this.GetComponent<PlayerManager>().Team;
             yield return new WaitForSeconds(fire_bullet_delay);
         }
     }

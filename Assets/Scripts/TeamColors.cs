@@ -11,8 +11,6 @@ public class TeamColors : MonoBehaviour {
         new Dictionary<GameManager.TeamType, Color>() {
             {GameManager.TeamType.A, TEAM_A},
             {GameManager.TeamType.B, TEAM_B},
-             {GameManager.TeamType.C, NO_TEAM},
-              {GameManager.TeamType.D, NO_TEAM},
             {GameManager.TeamType.NONE, NO_TEAM}
         };
 }

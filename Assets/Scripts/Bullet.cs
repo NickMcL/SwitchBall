@@ -6,13 +6,17 @@ public class Bullet : MonoBehaviour {
     public float bullet_speed;
     public Vector2 movement_vector;
     public int source_player_id;
-    GameManager.TeamType bullet_team;
+    public GameManager.TeamType bullet_team;
     Rigidbody2D rb;
 
 	// Use this for initialization
 	void Start () {
         rb = this.GetComponent<Rigidbody2D>();
+<<<<<<< HEAD
 		bullet_team = GameManager.playergo[source_player_id].GetComponent<PlayerManager>().Team;
+=======
+        //bullet_team = GameManager.Instance.playergo[source_player_id].GetComponent<PlayerManager>().Team;
+>>>>>>> 73e43a84d2f925135600c8f2dc76813e6b262567
         if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
             this.GetComponent<SpriteRenderer>().color = TeamColors.NO_TEAM;
         } else {
@@ -31,7 +35,7 @@ public class Bullet : MonoBehaviour {
             return;
         }
         if (coll.gameObject.tag == "Player" &&
-                coll.gameObject.GetComponent<Player>().player_id == player_id) {
+                coll.gameObject.GetComponent<PlayerManager>().player_id == source_player_id) {
             return;
         }
         Destroy(this.gameObject);

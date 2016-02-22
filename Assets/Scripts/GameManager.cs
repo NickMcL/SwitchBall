@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour {
 				go.transform.position = startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.StartPosition = startPosition [i];
-				if (teamA == 2) {
+                team.player_id = i;
+                if (teamA == 2) {
 					team.Team = TeamType.B;
 					teamB++;
 				} else if (teamB == 2) {
@@ -115,7 +116,8 @@ public class GameManager : MonoBehaviour {
 				go.transform.position =startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.StartPosition = startPosition [i];
-				if (teamA == 1) {
+                team.player_id = i;
+                if (teamA == 1) {
 					team.Team = TeamType.B;
 					teamB++;
 				} else if (teamB ==3)
@@ -142,8 +144,10 @@ public class GameManager : MonoBehaviour {
 		foreach (PlayerManager pm in players) {
 			if (OddBall.Instance.BelongTo == null)
 				return;
-			if (pm.Team == OddBall.Instance.BelongTo.Team)
-				pm.Score += 5;
+            if (pm == OddBall.Instance.BelongTo)
+                pm.Score += 2;
+            else if (pm.Team == OddBall.Instance.BelongTo.Team)
+                pm.Score += 1;
 			
 		}
 	}
