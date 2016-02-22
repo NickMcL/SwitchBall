@@ -39,6 +39,11 @@ public class GameManager : MonoBehaviour {
         players = new List<PlayerManager>();
         teams = new List<TeamType>();
         Mode = startType;
+		string OperatingSystem = SystemInfo.operatingSystem;
+		if (OperatingSystem.StartsWith("Windows")) {
+			Controls.SetMicrosoftMappings();
+		}
+		Debug.Log (SystemInfo.operatingSystem);
     }
     void Start() {
         InitiateTeams();
