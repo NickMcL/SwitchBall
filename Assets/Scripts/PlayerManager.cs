@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour {
 
 	private int _score;
 	private GameManager.TeamType _team;
+	private SpriteRenderer render;
 
 
 	public Vector3 StartPosition{ get; set;}
@@ -20,7 +21,12 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	void Start(){
-		
+		render = this.GetComponent<SpriteRenderer> ();
+	}
+
+
+	void Update(){
+		setColor ();
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
@@ -52,6 +58,17 @@ public class PlayerManager : MonoBehaviour {
 		this.transform.position = StartPosition;
 
 	}
+	public void setColor(){
+		if (Team == GameManager.TeamType.A)
+			render.color = Color.blue;
+		if (Team == GameManager.TeamType.B)
+			render.color = Color.red;
+		if (Team == GameManager.TeamType.C)
+			render.color = Color.yellow;
+		if (Team == GameManager.TeamType.D)
+			render.color = Color.green;
+	}
+	
 
 
 }
