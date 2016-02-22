@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour {
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.Team = teams [i];
 				team.StartPosition = startPosition [i];
+                team.player_id = i;
 				//Debug.Log (team.Team);
 				players.Add (team);
 			}
