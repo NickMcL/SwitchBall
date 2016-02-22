@@ -16,6 +16,7 @@ public class Player : MonoBehaviour {
 	public bool useController;
 	public bool has_triggered = false;
     public bool right_trigger_down = false;
+    public bool jump_reset;
 
     float jump_speed;
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour {
 		rigid = GetComponent<Rigidbody2D>();
 		inAir = false;
         jump_speed = rigid.gravityScale * jump_scale_factor;
+        jump_reset = false;
 	}
 	
 	void Update () {
@@ -40,32 +42,34 @@ public class Player : MonoBehaviour {
 	void updateMovement() {
         float x_direction = 0f;
 		if (useController) {
-			x_direction = move_speed * Input.GetAxis(Controls.axes_codes [player, Controls.axis_left_joy_hor]);
+			x_direction = Input.GetAxis(Controls.axes_codes[player, Controls.axis_left_joy_hor]);
+            if (Mathf.Abs(x_direction) < 0.5f) {
+                x_direction = 0.0f;
+            }
 		} else {
-			bool a = Input.GetKey (MOVE_LEFT_KEY);
-			bool d = Input.GetKey (MOVE_RIGHT_KEY);
+			bool a = Input.GetKey(MOVE_LEFT_KEY);
+			bool d = Input.GetKey(MOVE_RIGHT_KEY);
 			x_direction = a ? -1 : (d ? 1 : 0);
 		}
 		rigid.velocity = new Vector2(x_direction * move_speed, rigid.velocity.y);
 	}
 
     void updateJump() {
-		if (Input.GetAxis (Controls.axes_codes[player, Controls.axis_right_trigger]) > 0.0f) {
+		if (Mathf.Abs(Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) < 0.1f) {
+            jump_reset = true;
+		}
+		if (Mathf.Abs(Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) > 0.1f) {
 			right_trigger_down = true;
 		}
 
-		if (useController) {
-			if (!has_triggered && right_trigger_down && (!inAir)) {
-                has_triggered = true;
-                jump();
-			} else if (has_triggered && right_trigger_down && (!inAir)) {
-                jump();
-			}
-		} else {
-			if (Input.GetKeyDown (JUMP_KEY) && (!inAir)) {
-                jump();
-			}
+		if (useController && jump_reset && right_trigger_down) {
+            jump();
+            has_triggered = true;
+            jump_reset = false;
+		} else if (Input.GetKeyDown(JUMP_KEY) && (!inAir)) {
+            jump();
 		}
+        right_trigger_down = false;
     }
 
     void jump() {
@@ -78,7 +82,6 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D other) {
 		if (other.collider.tag == "LevelTerrain") {
 			inAir = false;
-			right_trigger_down = false;
 		}
 	}
 }
