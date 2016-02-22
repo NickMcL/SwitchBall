@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour {
 				go.transform.position = startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.StartPosition = startPosition [i];
-				if (teamA == 2) {
+                team.player_id = i;
+                if (teamA == 2) {
 					team.Team = TeamType.B;
 					teamB++;
 				} else if (teamB == 2) {
@@ -115,7 +116,8 @@ public class GameManager : MonoBehaviour {
 				go.transform.position =startPosition[i];
 				PlayerManager team = go.GetComponent<PlayerManager> ();
 				team.StartPosition = startPosition [i];
-				if (teamA == 1) {
+                team.player_id = i;
+                if (teamA == 1) {
 					team.Team = TeamType.B;
 					teamB++;
 				} else if (teamB ==3)

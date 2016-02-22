@@ -57,6 +57,7 @@ public class FireBullet : MonoBehaviour {
             new_bullet.GetComponent<Bullet>().source_player_id = this.GetComponent<PlayerManager>().player_id;
             new_bullet.GetComponent<Bullet>().movement_vector = fire_bullet_vector;
             new_bullet.transform.position = this.transform.position;
+            new_bullet.GetComponent<Bullet>().bullet_team = this.GetComponent<PlayerManager>().Team;
             yield return new WaitForSeconds(fire_bullet_delay);
         }
     }

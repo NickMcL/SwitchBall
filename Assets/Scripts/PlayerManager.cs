@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -7,9 +8,9 @@ public class PlayerManager : MonoBehaviour {
 	private GameManager.TeamType _team;
 	private SpriteRenderer render;
     public int player_id;
+    public Sprite noteam, redteam, blueteam;
 
-
-	public Vector3 StartPosition{ get; set;}
+    public Vector3 StartPosition{ get; set;}
 
     
 	public int Score{
@@ -27,7 +28,7 @@ public class PlayerManager : MonoBehaviour {
 
 
 	void Update(){
-		setColor ();
+		setColor();
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
@@ -60,7 +61,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
 	public void output(){
-		Debug.Log ("Team:" + Team + "Score" + Score);
+		Debug.Log ("Team:" + Team + "Score" + Score+"id"+player_id);
 	}
 
 	public void ChangeTeam(GameManager.TeamType teamtype){
@@ -74,8 +75,14 @@ public class PlayerManager : MonoBehaviour {
     public void setColor()
     {
         if (GameManager.Instance.Mode == GameManager.gameType.FFA)
-            render.color = TeamColors.NO_TEAM;
+            render.sprite = noteam;
+        else if (Team == GameManager.TeamType.A)
+        {
+            render.sprite = redteam;
+        }
         else
-            render.color = TeamColors.TEAM_COLOR_MAP[Team];
+        {
+            render.sprite = blueteam;
+        }
     }
 }
