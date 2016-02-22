@@ -31,7 +31,7 @@ public class OddBall : MonoBehaviour {
 		OddBall.Instance.BelongTo = pm;
 		OddBall.Instance.transform.SetParent (pm.gameObject.transform);
 		OddBall.Instance.GetComponent<CircleCollider2D> ().enabled = false;
-		OddBall.Instance.transform.localPosition =  new Vector3 (-0.1f, 0.68f, 0f);
+		OddBall.Instance.transform.localPosition =  new Vector3 (-0.1f, 4.5f, 0f);
 	}
 
 
