@@ -29,6 +29,8 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update () {
+		if (this.GetComponent<PlayerManager> ().death == true)
+			return;
 		if (Input.GetKeyDown (KeyCode.Q)) {
 			useController = true;
 		}

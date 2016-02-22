@@ -30,6 +30,8 @@ public class FireBullet : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+		if (this.GetComponent<PlayerManager> ().death == true)
+			return;
         updateFireDirection();
         updateSwapAttack();
     }

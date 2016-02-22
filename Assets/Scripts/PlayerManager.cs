@@ -40,8 +40,9 @@ public class PlayerManager : MonoBehaviour {
 		if (coll.gameObject.tag == "Boundary") {
 			if (OddBall.Instance.BelongTo == this) {
 				OddBall.Instance.Initial ();
-				death = true;
+
 			}
+			death = true;
 			Invoke ("respawn", 3f);
 		}
 		
