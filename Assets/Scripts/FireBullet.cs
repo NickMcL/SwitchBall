@@ -7,6 +7,8 @@ public class FireBullet : MonoBehaviour {
     const KeyCode FIRE_RIGHT_KEY = KeyCode.RightArrow;
     const KeyCode FIRE_UP_KEY = KeyCode.UpArrow;
     const KeyCode SWAP_ATTACK_KEY = KeyCode.W;
+	public int 					player = Controls.player1;
+
 
     public float fire_bullet_delay = 0.3f;
     float stop_bullet_fire_time;
@@ -32,30 +34,50 @@ public class FireBullet : MonoBehaviour {
         updateSwapAttack();
     }
 
-    void updateFireDirection() {
-        fire_bullet_vector = Vector2.zero;
-	    if (Input.GetKey(FIRE_LEFT_KEY)) {
-            fire_bullet_vector.x -= 1;
-        }
-	    if (Input.GetKey(FIRE_DOWN_KEY)) {
-            fire_bullet_vector.y -= 1;
-        }
-	    if (Input.GetKey(FIRE_RIGHT_KEY)) {
-            fire_bullet_vector.x += 1;
-        }
-	    if (Input.GetKey(FIRE_UP_KEY)) {
-            fire_bullet_vector.y += 1;
-        }
-        
-        if (fire_bullet_vector == Vector2.zero && fire_bullets != null) {
-            StopCoroutine(fire_bullets);
-            fire_bullets = null;
-            stop_bullet_fire_time = Time.time;
-        } else if (fire_bullet_vector != Vector2.zero && fire_bullets == null &&
-                (Time.time - stop_bullet_fire_time) >= fire_bullet_delay) {
-            fire_bullets = StartCoroutine(fireBullets());
-        }
-    }
+	void updateFireDirection() {
+		fire_bullet_vector = Vector2.zero;
+		//controller bullet fire
+		float x_look_val;
+		float y_look_val;
+
+		x_look_val = Input.GetAxis (Controls.axes_codes [player, Controls.axis_right_joy_hor]);
+		y_look_val = Input.GetAxis (Controls.axes_codes [player, Controls.axis_right_joy_vert]);
+
+		if (this.GetComponent<Player> ().useController) {
+			fire_bullet_vector.x += x_look_val;
+			fire_bullet_vector.y += y_look_val;
+
+		}  else {
+			if (Input.GetKey (FIRE_LEFT_KEY)) {
+				fire_bullet_vector.x -= 1;
+			}
+			if (Input.GetKey (FIRE_DOWN_KEY)) {
+				fire_bullet_vector.y -= 1;
+			}
+			if (Input.GetKey (FIRE_RIGHT_KEY)) {
+				fire_bullet_vector.x += 1;
+			}
+			if (Input.GetKey (FIRE_UP_KEY)) {
+				fire_bullet_vector.y += 1;
+			}
+		}
+		if (.5 <= Mathf.Abs (x_look_val) || (.5 <= Mathf.Abs (y_look_val))) {
+			if (fire_bullet_vector != Vector2.zero && fire_bullets == null &&
+				(Time.time - stop_bullet_fire_time) >= fire_bullet_delay) {
+				print (x_look_val);
+				print (y_look_val);
+
+				fire_bullets = StartCoroutine (fireBullets ());
+			}
+		}
+		else if (fire_bullets != null) {
+			StopCoroutine (fire_bullets);
+			fire_bullets = null;
+			stop_bullet_fire_time = Time.time;
+		}
+
+	}
+
 
     IEnumerator fireBullets() {
         while (true) {
