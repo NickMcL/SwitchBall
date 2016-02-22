@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = this.GetComponent<Rigidbody2D>();
-        bullet_team = GameManager.playergo[player_id].GetComponent<Player>().Team;
+		bullet_team = GameManager.playergo[source_player_id].GetComponent<PlayerManager>().Team;
         if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
             this.GetComponent<SpriteRenderer>().color = TeamColors.NO_TEAM;
         } else {
