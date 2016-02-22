@@ -11,22 +11,24 @@ public class FireBullet : MonoBehaviour {
     public float fire_bullet_delay = 0.3f;
     float stop_bullet_fire_time;
     bool fired_swap;
-	int player;
+    int player;
 
+    Player player_comp;
     Object bullet_prefab;
     Object swap_attack_prefab;
     Vector2 fire_bullet_vector;
     Coroutine fire_bullets;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         fire_bullets = null;
         bullet_prefab = Resources.Load("Bullet");
         swap_attack_prefab = Resources.Load("Swap");
         stop_bullet_fire_time = -fire_bullet_delay;
         fired_swap = false;
-        player = this.GetComponent<Player>().player;
-	}
+        player_comp = this.GetComponent<Player>();
+        player = player_comp.player;
+    }
 
     // Update is called once per frame
     void Update() {
@@ -36,50 +38,46 @@ public class FireBullet : MonoBehaviour {
         updateSwapAttack();
     }
 
-	void updateFireDirection() {
-		fire_bullet_vector = Vector2.zero;
-		//controller bullet fire
-		float x_look_val;
-		float y_look_val;
+    void updateFireDirection() {
+        fire_bullet_vector = Vector2.zero;
+        //controller bullet fire
+        float x_look_val;
+        float y_look_val;
+        bool fire_delay_exceeded = (Time.time - stop_bullet_fire_time) >= fire_bullet_delay;
 
-		x_look_val = Input.GetAxis (Controls.axes_codes[player, Controls.axis_right_joy_hor]);
-		y_look_val = Input.GetAxis (Controls.axes_codes[player, Controls.axis_right_joy_vert]);
+        x_look_val = Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_joy_hor]);
+        y_look_val = Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_joy_vert]);
 
-		if (this.GetComponent<Player>().useController) {
-			fire_bullet_vector.x += x_look_val;
-			fire_bullet_vector.y += y_look_val;
+        if (player_comp.useController) {
+            fire_bullet_vector.x += x_look_val;
+            fire_bullet_vector.y += y_look_val;
+        }
+        else {
+            if (Input.GetKey(FIRE_LEFT_KEY)) {
+                fire_bullet_vector.x -= 1;
+            }
+            if (Input.GetKey(FIRE_DOWN_KEY)) {
+                fire_bullet_vector.y -= 1;
+            }
+            if (Input.GetKey(FIRE_RIGHT_KEY)) {
+                fire_bullet_vector.x += 1;
+            }
+            if (Input.GetKey(FIRE_UP_KEY)) {
+                fire_bullet_vector.y += 1;
+            }
+        }
 
-		}  else {
-			if (Input.GetKey(FIRE_LEFT_KEY)) {
-				fire_bullet_vector.x -= 1;
-			}
-			if (Input.GetKey(FIRE_DOWN_KEY)) {
-				fire_bullet_vector.y -= 1;
-			}
-			if (Input.GetKey(FIRE_RIGHT_KEY)) {
-				fire_bullet_vector.x += 1;
-			}
-			if (Input.GetKey(FIRE_UP_KEY)) {
-				fire_bullet_vector.y += 1;
-			}
-		}
-		if (.5 <= Mathf.Abs(x_look_val) || (.5 <= Mathf.Abs(y_look_val))) {
-			if (fire_bullet_vector != Vector2.zero && fire_bullets == null &&
-				(Time.time - stop_bullet_fire_time) >= fire_bullet_delay) {
-				print (x_look_val);
-				print (y_look_val);
-
-				fire_bullets = StartCoroutine(fireBullets ());
-			}
-		}
-		else if (fire_bullets != null) {
-			StopCoroutine(fire_bullets);
-			fire_bullets = null;
-			stop_bullet_fire_time = Time.time;
-		}
-
-	}
-
+        if (0.5f <= Mathf.Abs(x_look_val) || (0.5f <= Mathf.Abs(y_look_val)) &&
+                fire_bullets == null && fire_delay_exceeded) {
+            fire_bullets = StartCoroutine(fireBullets());
+        } else if (fire_bullet_vector != Vector2.zero && fire_bullets == null && fire_delay_exceeded) {
+            fire_bullets = StartCoroutine(fireBullets());
+        } else if (fire_bullets != null) {
+            StopCoroutine(fire_bullets);
+            fire_bullets = null;
+            stop_bullet_fire_time = Time.time;
+        }
+    }
 
     IEnumerator fireBullets() {
         while (true) {
@@ -95,7 +93,7 @@ public class FireBullet : MonoBehaviour {
     void updateSwapAttack() {
         if ((!Input.GetKey(SWAP_ATTACK_KEY) &&
                 true) || //!(Input.GetAxis(Controls.axes_codes[player, Controls.axis_left_trigger]) > 0.0f)) ||
-                fired_swap) {
+                fired_swap || fire_bullet_vector == Vector2.zero) {
             return;
         }
 
