@@ -10,22 +10,29 @@ public class Player : MonoBehaviour {
 
     public Rigidbody2D rigid;
     public bool inAir;
-    public float move_speed = 4.0f;
+    public float move_accel = 4.0f;
+    public float max_velocity = 7.0f;
     public float jump_scale_factor = 3.0f;
+
     public int player;
     public bool useController;
     public bool has_triggered = false;
     public bool right_trigger_down = false;
     public bool jump_reset;
+    public bool disable_vel = false;
 
-    float jump_speed;
+    public float jump_accel;
 
     // Use this for initialization
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         inAir = false;
-        jump_speed = rigid.gravityScale * jump_scale_factor;
+        jump_accel = rigid.gravityScale * jump_scale_factor;
         jump_reset = false;
+        useController = true;
+
+        jump_accel = 30f;
+        move_accel = 100f;
     }
 
     void Update() {
@@ -37,7 +44,9 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.P)) {
             useController = false;
         }
-        updateMovement();
+        if (!disable_vel) {
+            updateMovement();
+        }
         updateJump();
     }
 
@@ -54,16 +63,20 @@ public class Player : MonoBehaviour {
             bool d = Input.GetKey(MOVE_RIGHT_KEY);
             x_direction = a ? -1 : (d ? 1 : 0);
         }
-        rigid.velocity = new Vector2(x_direction * move_speed, rigid.velocity.y);
+
+        if (rigid.velocity.magnitude < max_velocity || rigid.velocity.x * x_direction <= 0.0f) {
+            rigid.AddForce(new Vector2(x_direction, 0f) * move_accel);
+        }
+        if (Mathf.Abs(rigid.velocity.x) < 2.0f) {
+            rigid.velocity = new Vector2(0f, rigid.velocity.y);
+        }
     }
 
     void updateJump() {
 		if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) < 0.1f) {
-			print ("reset jump");
 			jump_reset = true;
 		}
 		if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) > 0.1f) {
-			print ("right trigger down");
 			right_trigger_down = true;
 		}
 
@@ -79,15 +92,18 @@ public class Player : MonoBehaviour {
     }
 
     void jump() {
-        //transform.Translate(new Vector3 (0, 1));
-        rigid.velocity = new Vector2(rigid.velocity.x, rigid.velocity.y + jump_speed);
+        //rigid.velocity = new Vector2(rigid.velocity.x, rigid.velocity.y + jump_speed);
+        rigid.AddForce(new Vector2(0f, 1f) * jump_accel, ForceMode2D.Impulse);
         inAir = true;
-        print("jump!");
     }
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.collider.tag == "LevelTerrain") {
             inAir = false;
         }
+    }
+
+    public void knockback(Vector2 direction) {
+
     }
 }

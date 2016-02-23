@@ -38,7 +38,7 @@ public class OddBall : MonoBehaviour {
     }
 
     void setupColor() {
-        if (BelongTo == null) {
+        if (BelongTo == null || GameManager.Instance.Mode == GameManager.gameType.FFA) {
             this.GetComponent<SpriteRenderer>().color = TeamColors.NO_TEAM;
         } else {
             this.GetComponent<SpriteRenderer>().color = TeamColors.TEAM_COLOR_MAP[BelongTo.Team];

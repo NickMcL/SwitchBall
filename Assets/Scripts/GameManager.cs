@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public GameObject player;
     public gameType startType;
     public List<Vector3> startPosition;
+    public float respawn_time;
 
     //for test
     public GameObject swap;
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour {
     private gameType _mode;
     private List<TeamType> teams;
     public List<GameObject> playergo;
-    private List<PlayerManager> players;
+    public List<PlayerManager> players;
 
     //Which team holds the ball
 
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour {
         Mode = startType;
 		string OperatingSystem = SystemInfo.operatingSystem;
 		if (OperatingSystem.StartsWith("Windows")) {
+            print("fasadjsa");
 			Controls.SetMicrosoftMappings();
 		}
 		Debug.Log (SystemInfo.operatingSystem);
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour {
     //Initializing the players, random or 1v1v1v1
     void InitiatePlayers(gameType gmtype) {
         if (gmtype == gameType.FFA) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < playergo.Capacity; i++) {
                 GameObject go = Instantiate(playergo[i]);
                 go.transform.position = startPosition[i];
                 PlayerManager team = go.GetComponent<PlayerManager>();
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour {
         else if (gmtype == gameType.TvT) {
             int teamA = 0;
             int teamB = 0;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < playergo.Capacity; i++) {
                 GameObject go = Instantiate(playergo[i]);
                 go.transform.position = startPosition[i];
                 PlayerManager team = go.GetComponent<PlayerManager>();
@@ -118,7 +120,7 @@ public class GameManager : MonoBehaviour {
         else if (gmtype == gameType.OvT) {
             int teamA = 0;
             int teamB = 0;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < playergo.Capacity; i++) {
                 GameObject go = Instantiate(playergo[i]);
                 go.transform.position = startPosition[i];
                 PlayerManager team = go.GetComponent<PlayerManager>();
@@ -174,26 +176,22 @@ public class GameManager : MonoBehaviour {
     }
 
     public void changeToFFA() {
-        for (int i = 0; i < 4; i++) {
-
+        for (int i = 0; i < playergo.Capacity; i++) {
             PlayerManager team = players[i].GetComponent<PlayerManager>();
             team.Team = teams[i];
-
         }
         Mode = GameManager.gameType.FFA;
-
     }
 
     public bool returnToFFA() {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < playergo.Capacity; i++) {
             if (players[i].GetComponent<PlayerManager>().Team != players[0].GetComponent<PlayerManager>().Team)
                 return false;
-            else
-                continue;
         }
         changeToFFA();
         return true;
     }
+
 	public void winTheGame(PlayerManager pm){
 		PlayerPrefs.SetInt ("winner", pm.player_id);
 		SceneManager.LoadScene ("_Scene_End");
