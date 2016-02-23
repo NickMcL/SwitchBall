@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using XInputDotNetPure;
 
 public class Player : MonoBehaviour {
     const KeyCode MOVE_LEFT_KEY = KeyCode.A;
@@ -19,9 +20,10 @@ public class Player : MonoBehaviour {
     public bool has_triggered = false;
     public bool right_trigger_down = false;
     public bool jump_reset;
-    public bool disable_vel = false;
 
     public float jump_accel;
+
+    GamePadState pad_state;
 
     // Use this for initialization
     void Start() {
@@ -31,11 +33,12 @@ public class Player : MonoBehaviour {
         jump_reset = false;
         useController = true;
 
-        jump_accel = 30f;
+        jump_accel = 34f;
         move_accel = 100f;
     }
 
     void Update() {
+        pad_state = GamePad.GetState((PlayerIndex) player);
         if (this.GetComponent<PlayerManager>().death == true)
             return;
         if (Input.GetKeyDown(KeyCode.Q)) {
@@ -44,16 +47,14 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.P)) {
             useController = false;
         }
-        if (!disable_vel) {
-            updateMovement();
-        }
+        updateMovement();
         updateJump();
     }
 
     void updateMovement() {
         float x_direction = 0f;
         if (useController) {
-            x_direction = Input.GetAxis(Controls.axes_codes[player, Controls.axis_left_joy_hor]);
+            x_direction = pad_state.ThumbSticks.Left.X;
             if (Mathf.Abs(x_direction) < 0.5f) {
                 x_direction = 0.0f;
             }
@@ -73,10 +74,10 @@ public class Player : MonoBehaviour {
     }
 
     void updateJump() {
-		if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) < 0.1f) {
-			jump_reset = true;
-		}
-		if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) > 0.1f) {
+        if (pad_state.Triggers.Right < 0.1f) {
+            jump_reset = true;
+        }
+		if (pad_state.Triggers.Right > 0.1f) {
 			right_trigger_down = true;
 		}
 
