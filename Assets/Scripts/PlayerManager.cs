@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour {
 	private SpriteRenderer render;
     public int player_id;
     public Sprite noteam, redteam, blueteam;
+	public bool death;
 
     public Vector3 StartPosition{ get; set;}
 
@@ -23,6 +24,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	void Start(){
+		death = false;
 		render = this.GetComponent<SpriteRenderer> ();
 	}
 
@@ -38,6 +40,7 @@ public class PlayerManager : MonoBehaviour {
 		if (coll.gameObject.tag == "Boundary") {
 			if (OddBall.Instance.BelongTo == this) {
 				OddBall.Instance.Initial ();
+				death = true;
 			}
 			Invoke ("respawn", 3f);
 		}
@@ -69,6 +72,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 	public void respawn(){
 		this.transform.position = StartPosition;
+		death = false;
 
 	}
 

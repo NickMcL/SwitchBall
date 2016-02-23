@@ -18,6 +18,9 @@ public class OddBall : MonoBehaviour {
 		Instance = this;
 		Initial ();
 	}
+	void Update(){
+		setupColor ();
+	}
 
 	public void Initial(){
 		this.transform.SetParent (null);
@@ -33,6 +36,11 @@ public class OddBall : MonoBehaviour {
 		OddBall.Instance.GetComponent<CircleCollider2D> ().enabled = false;
 		OddBall.Instance.transform.localPosition =  new Vector3 (-0.1f, 4.5f, 0f);
 	}
+	void setupColor(){
+		if(BelongTo==null)
+			this.GetComponent<SpriteRenderer> ().color = TeamColors.NO_TEAM;	
+		else this.GetComponent<SpriteRenderer> ().color = TeamColors.TEAM_COLOR_MAP [BelongTo.Team];
 
+	}
 
 }
