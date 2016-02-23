@@ -33,7 +33,7 @@ public class Player : MonoBehaviour {
         jump_reset = false;
         useController = true;
 
-        jump_accel = 34f;
+        jump_accel = 33f;
         move_accel = 100f;
     }
 
