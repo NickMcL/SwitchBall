@@ -9,7 +9,12 @@ public class FireBullet : MonoBehaviour {
     const KeyCode SWAP_ATTACK_KEY = KeyCode.W;
 
     public float fire_bullet_delay = 0.3f;
+    public float swap_attack_cooldown = 3.0f;
+    public GameObject swap_attack_cooldown_bar_go;
+    CooldownBar swap_attack_cooldown_bar;
+
     float stop_bullet_fire_time;
+    float swap_attack_cooldown_start;
     bool fired_swap;
     int player;
 
@@ -24,8 +29,11 @@ public class FireBullet : MonoBehaviour {
         fire_bullets = null;
         bullet_prefab = Resources.Load("Bullet");
         swap_attack_prefab = Resources.Load("Swap");
+
         stop_bullet_fire_time = -fire_bullet_delay;
-        fired_swap = false;
+        swap_attack_cooldown_start = -swap_attack_cooldown;
+        swap_attack_cooldown_bar = swap_attack_cooldown_bar_go.GetComponent<CooldownBar>();
+
         player_comp = this.GetComponent<Player>();
         player = player_comp.player;
     }
@@ -66,11 +74,13 @@ public class FireBullet : MonoBehaviour {
                 fire_bullet_vector.y += 1;
             }
         }
-
-        if (0.5f <= Mathf.Abs(x_look_val) || (0.5f <= Mathf.Abs(y_look_val)) &&
+        fire_bullet_vector = fire_bullet_vector.normalized;
+        
+        if (player_comp.useController && (0.5f <= Mathf.Abs(x_look_val) || 0.5f <= Mathf.Abs(y_look_val)) &&
                 fire_bullets == null && fire_delay_exceeded) {
             fire_bullets = StartCoroutine(fireBullets());
-        } else if (fire_bullet_vector != Vector2.zero && fire_bullets == null && fire_delay_exceeded) {
+        } else if (!player_comp.useController && fire_bullet_vector != Vector2.zero &&
+                fire_bullets == null && fire_delay_exceeded) {
             fire_bullets = StartCoroutine(fireBullets());
         } else if (fire_bullets != null) {
             StopCoroutine(fire_bullets);
@@ -91,9 +101,12 @@ public class FireBullet : MonoBehaviour {
     }
 
     void updateSwapAttack() {
+        float cooldown_progress = (Time.time - swap_attack_cooldown_start) / swap_attack_cooldown;
+        swap_attack_cooldown_bar.GetComponent<CooldownBar>().setProgress(Mathf.Min(cooldown_progress, 1f));
+
         if ((!Input.GetKey(SWAP_ATTACK_KEY) &&
-                true) || //!(Input.GetAxis(Controls.axes_codes[player, Controls.axis_left_trigger]) > 0.0f)) ||
-                fired_swap || fire_bullet_vector == Vector2.zero) {
+                !(Input.GetAxis(Controls.axes_codes[player, Controls.axis_left_trigger]) > 0.0f)) ||
+                cooldown_progress < 1.0f || fire_bullet_vector == Vector2.zero) {
             return;
         }
 
@@ -102,6 +115,6 @@ public class FireBullet : MonoBehaviour {
         new_swap_attack.GetComponent<swapAttack>().movement_vector = fire_bullet_vector;
         new_swap_attack.transform.position = this.transform.position;
 		new_swap_attack.GetComponent<swapAttack> ().bullet_team = this.GetComponent<PlayerManager> ().Team;
-        fired_swap = true;
+        swap_attack_cooldown_start = Time.time;
     }
 }
