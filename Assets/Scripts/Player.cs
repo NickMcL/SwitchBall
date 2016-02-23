@@ -58,14 +58,16 @@ public class Player : MonoBehaviour {
     }
 
     void updateJump() {
-        if (Mathf.Abs(Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) < 0.1f) {
-            jump_reset = true;
-        }
-        if (Mathf.Abs(Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) > 0.1f) {
-            right_trigger_down = true;
-        }
+		if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) < 0.1f) {
+			print ("reset jump");
+			jump_reset = true;
+		}
+		if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) > 0.1f) {
+			print ("right trigger down");
+			right_trigger_down = true;
+		}
 
-        if (useController && jump_reset && right_trigger_down) {
+		if ((useController && jump_reset && right_trigger_down) && (!inAir)) {
             jump();
             has_triggered = true;
             jump_reset = false;
