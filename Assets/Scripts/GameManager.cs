@@ -43,10 +43,6 @@ public class GameManager : MonoBehaviour {
 		InitiateTeams ();
 		InitiatePlayers (startType);
 		InvokeRepeating ("UpdateScore", 1f, 1f);
-
-		//test
-		swap.GetComponent<swapAttack>().FromPlayer=players[0];
-	
 	}
 	
 	// Update is called once per frame

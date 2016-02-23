@@ -1,17 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class swapAttack : MonoBehaviour {
-	private bool changed = false;
-	private PlayerManager _fromPlayer;
-	private PlayerManager _toPlayer;
+public class SwapAttack : MonoBehaviour {
+    public float bullet_speed;
+    public Vector2 movement_vector;
+    public int source_player_id;
+    public GameManager.TeamType bullet_team;
+    public float rotations_per_minute;
+    Rigidbody2D rb;
 
-	public PlayerManager FromPlayer{
-		get{ return _fromPlayer;}
-		set{ _fromPlayer = value;}
-	}
+    // Use this for initialization
+    void Start() {
+        rb = this.GetComponent<Rigidbody2D>();
+        rotations_per_minute = 20f;
+    }
 
-	void OnCollisionEnter2D(Collision2D coll){
+    // Update is called once per frame
+    void Update() {
+        rb.velocity = movement_vector * bullet_speed;
+        transform.Rotate(0, 0, 6.0f * rotations_per_minute * Time.deltaTime);
+    }
+
+    void OnTriggerEnter2D(Collider2D coll) {
+        if (coll.gameObject.tag == "Boundary") {
+            Destroy(this.gameObject);
+        }
+        if (coll.gameObject.tag == "Player" &&
+                coll.gameObject.GetComponent<PlayerManager>().player_id != source_player_id) {
+            print("Hit player");
+        }
+    }
+
+	/*void OnCollisionEnter2D(Collision2D coll){
 		if (coll.gameObject.tag == "Player"&&!changed) {
 			_toPlayer = coll.gameObject.GetComponent<PlayerManager> ();
 			//hit itself return nothing
@@ -55,6 +75,6 @@ public class swapAttack : MonoBehaviour {
 
 			Destroy (this.gameObject);
 		}
-			
-	}
+	}*/
+
 }
