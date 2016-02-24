@@ -28,9 +28,9 @@ public class SwapAttack : MonoBehaviour {
         if (coll.gameObject.tag == "Player" &&
                 coll.gameObject.GetComponent<PlayerManager>().player_id != source_player_id) {
             print("Hit player " + coll.gameObject.GetComponent<PlayerManager>().player_id);
-			coll.gameObject.GetComponent<PlayerManager>().swapTeam();
-			AudioSource Swap = coll.GetComponent<AudioSource> ();
-			Swap.Play ();
+            coll.gameObject.GetComponent<PlayerManager>().swapTeam();
+            AudioSource Swap = coll.GetComponent<AudioSource>();
+            Swap.Play();
         }
     }
 }

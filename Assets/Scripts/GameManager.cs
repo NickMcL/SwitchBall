@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     public gameType startType;
     public List<Vector3> startPosition;
     public float respawn_time;
+    public int winning_score;
 
     //for test
     public GameObject swap;
@@ -40,13 +41,13 @@ public class GameManager : MonoBehaviour {
         players = new List<PlayerManager>();
         teams = new List<TeamType>();
         Mode = startType;
-		string OperatingSystem = SystemInfo.operatingSystem;
-		if (OperatingSystem.StartsWith("Windows")) {
-            print("fasadjsa");
-			Controls.SetMicrosoftMappings();
-		}
-		Debug.Log (SystemInfo.operatingSystem);
+        string OperatingSystem = SystemInfo.operatingSystem;
+        if (OperatingSystem.StartsWith("Windows")) {
+            Controls.SetMicrosoftMappings();
+        }
+        Debug.Log(SystemInfo.operatingSystem);
     }
+
     void Start() {
         InitiateTeams();
         InitiatePlayers(startType);
@@ -71,6 +72,7 @@ public class GameManager : MonoBehaviour {
         teams.Add(TeamType.D);
         teams.Add(TeamType.NONE);
     }
+
     //Initializing the players, random or 1v1v1v1
     void InitiatePlayers(gameType gmtype) {
         if (gmtype == gameType.FFA) {
@@ -152,15 +154,43 @@ public class GameManager : MonoBehaviour {
 
     //Update the score
     void UpdateScore() {
+        if (OddBall.Instance.BelongTo == null) {
+            return;
+        }
+
+        int mode_bonus = 0, nonscoring_players = 0;
+        PlayerManager ball_player = null;
+        if (Mode == gameType.FFA) {
+            mode_bonus = 3;
+        } else if (Mode == gameType.TvT) {
+            mode_bonus = 2;
+        } else if (Mode == gameType.OvT) {
+            mode_bonus = 1;
+        }
+
         foreach (PlayerManager pm in players) {
-            if (OddBall.Instance.BelongTo == null)
-                return;
-            if (pm == OddBall.Instance.BelongTo)
-                pm.Score += 2;
-            else if (pm.Team == OddBall.Instance.BelongTo.Team)
-                pm.Score += 1;
-			if (pm.Score >= 50)
-				pm.Score = 50;
+            if (pm == OddBall.Instance.BelongTo) {
+                pm.Score += 1 + mode_bonus;
+                ball_player = pm;
+            }
+            else if (pm.Team == OddBall.Instance.BelongTo.Team) {
+                pm.Score += mode_bonus;
+            } else {
+                ++nonscoring_players;
+            }
+
+            if (pm.Score >= winning_score) {
+                pm.Score = winning_score;
+                winTheGame(pm);
+            }
+        }
+
+        if (nonscoring_players == (playergo.Capacity - 1) && Mode == gameType.OvT) {
+            ball_player.Score += 2;
+            if (ball_player.Score >= winning_score) {
+                ball_player.Score = winning_score;
+                winTheGame(ball_player);
+            }
         }
     }
 
@@ -168,32 +198,37 @@ public class GameManager : MonoBehaviour {
         foreach (PlayerManager pm in players) {
             if (pm == input) {
                 pm.Team = GameManager.TeamType.A;
+                pm.gameObject.layer = LayerMask.NameToLayer("TeamAPlayer");
             }
-            else
+            else {
                 pm.Team = GameManager.TeamType.B;
+                pm.gameObject.layer = LayerMask.NameToLayer("TeamBPlayer");
+            }
         }
         Mode = GameManager.gameType.OvT;
     }
 
     public void changeToFFA() {
         for (int i = 0; i < playergo.Capacity; i++) {
-            PlayerManager team = players[i].GetComponent<PlayerManager>();
-            team.Team = teams[i];
+            PlayerManager player_manager = players[i].GetComponent<PlayerManager>();
+            player_manager.Team = teams[i];
+            player_manager.gameObject.layer = LayerMask.NameToLayer("Player");
         }
         Mode = GameManager.gameType.FFA;
     }
 
     public bool returnToFFA() {
         for (int i = 1; i < playergo.Capacity; i++) {
-            if (players[i].GetComponent<PlayerManager>().Team != players[0].GetComponent<PlayerManager>().Team)
+            if (players[i].GetComponent<PlayerManager>().Team != players[0].GetComponent<PlayerManager>().Team) {
                 return false;
+            }
         }
         changeToFFA();
         return true;
     }
 
-	public void winTheGame(PlayerManager pm){
-		PlayerPrefs.SetInt ("winner", pm.player_id);
-		SceneManager.LoadScene ("_Scene_End");
-	}
+    public void winTheGame(PlayerManager pm) {
+        PlayerPrefs.SetInt("winner", pm.player_id);
+        SceneManager.LoadScene("_Scene_End");
+    }
 }

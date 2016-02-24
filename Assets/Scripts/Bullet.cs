@@ -27,8 +27,7 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "Bullet" &&
-                (coll.gameObject.GetComponent<Bullet>().bullet_team == bullet_team ||
-                GameManager.Instance.Mode == GameManager.gameType.FFA)) {
+                coll.gameObject.GetComponent<Bullet>().bullet_team == bullet_team) {
             return;
         }
         if (coll.gameObject.tag == "Player" &&

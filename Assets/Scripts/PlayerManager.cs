@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 
-    private int _score;
+    private float _score;
     private GameManager.TeamType _team;
     private SpriteRenderer render;
     public int player_id;
@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour {
     public Vector3 StartPosition { get; set; }
 
 
-    public int Score {
+    public float Score {
         get { return _score; }
         set { _score = value; }
     }
@@ -30,12 +30,8 @@ public class PlayerManager : MonoBehaviour {
         change = true;
     }
 
-
     void Update() {
         setColor();
-        if (Score == 50) {
-            GameManager.Instance.winTheGame(this);
-        }
     }
 
     void OnCollisionEnter2D(Collision2D coll) {
@@ -78,8 +74,10 @@ public class PlayerManager : MonoBehaviour {
 
         if (Team == GameManager.TeamType.A) {
             Team = GameManager.TeamType.B;
+            this.gameObject.layer = LayerMask.NameToLayer("TeamBPlayer");
         } else if (Team == GameManager.TeamType.B) {
             Team = GameManager.TeamType.A;
+            this.gameObject.layer = LayerMask.NameToLayer("TeamAPlayer");
         }
 
         if (GameManager.Instance.returnToFFA()) {
