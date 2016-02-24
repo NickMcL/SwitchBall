@@ -55,9 +55,12 @@ public class PlayerManager : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "Bullet") {
-            if (coll.gameObject.GetComponent<Bullet>().source_player_id == GetComponent<PlayerManager>().player_id) {
+            Bullet hit_bullet = coll.gameObject.GetComponent<Bullet>();
+            if (hit_bullet.source_player_id == player_id ||
+                    (GameManager.Instance.Mode != GameManager.gameType.FFA && hit_bullet.bullet_team == Team)) {
                 return;
             }
+
             if (OddBall.Instance.BelongTo == this) {
                 OddBall.Instance.Initial();
             }

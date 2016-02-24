@@ -20,6 +20,7 @@ public class FireBullet : MonoBehaviour {
     int player;
 
     Player player_comp;
+    PlayerManager player_manager_comp;
     Object bullet_prefab;
     Object swap_attack_prefab;
     Vector2 fire_bullet_vector;
@@ -37,6 +38,7 @@ public class FireBullet : MonoBehaviour {
         swap_attack_cooldown_bar = swap_attack_cooldown_bar_go.GetComponent<CooldownBar>();
 
         player_comp = this.GetComponent<Player>();
+        player_manager_comp = this.GetComponent<PlayerManager>();
         player = player_comp.player;
     }
 
@@ -80,10 +82,10 @@ public class FireBullet : MonoBehaviour {
         fire_bullet_vector = fire_bullet_vector.normalized;
         
         if (player_comp.useController && (0.5f <= Mathf.Abs(x_look_val) || 0.5f <= Mathf.Abs(y_look_val)) &&
-                fire_bullets == null && fire_delay_exceeded) {
+                fire_bullets == null && fire_delay_exceeded && OddBall.Instance.BelongTo != player_manager_comp) {
             fire_bullets = StartCoroutine(fireBullets());
         } else if (!player_comp.useController && fire_bullet_vector != Vector2.zero &&
-                fire_bullets == null && fire_delay_exceeded) {
+                fire_bullets == null && fire_delay_exceeded && OddBall.Instance.BelongTo != player_manager_comp) {
             fire_bullets = StartCoroutine(fireBullets());
         } else if (fire_bullets != null) {
             StopCoroutine(fire_bullets);

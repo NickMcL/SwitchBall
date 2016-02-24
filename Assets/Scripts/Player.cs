@@ -99,7 +99,7 @@ public class Player : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D other) {
-        if (other.collider.tag == "LevelTerrain") {
+        if (other.collider.tag == "LevelTerrain" || other.collider.tag == "Player") {
             inAir = false;
         }
     }

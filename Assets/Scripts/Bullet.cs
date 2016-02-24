@@ -27,11 +27,12 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "Bullet" &&
-                coll.gameObject.GetComponent<Bullet>().bullet_team == bullet_team) {
+                (coll.gameObject.GetComponent<Bullet>().bullet_team == bullet_team ||
+                GameManager.Instance.Mode == GameManager.gameType.FFA)) {
             return;
         }
         if (coll.gameObject.tag == "Player" &&
-                coll.gameObject.GetComponent<PlayerManager>().player_id == source_player_id) {
+                coll.gameObject.GetComponent<PlayerManager>().Team == bullet_team) {
             return;
         }
         Destroy(this.gameObject);
