@@ -38,7 +38,9 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
-        pad_state = GamePad.GetState((PlayerIndex) player);
+		if (SystemInfo.operatingSystem.StartsWith("Windows")) {
+	        pad_state = GamePad.GetState((PlayerIndex) player);
+		}
         if (this.GetComponent<PlayerManager>().death == true)
             return;
         if (Input.GetKeyDown(KeyCode.Q)) {

@@ -44,7 +44,9 @@ public class FireBullet : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        pad_state = GamePad.GetState((PlayerIndex) player);
+		if (SystemInfo.operatingSystem.StartsWith("Windows")) {
+			pad_state = GamePad.GetState((PlayerIndex) player);
+		}
 		if (this.GetComponent<PlayerManager> ().death == true)
 			return;
         updateFireDirection();
