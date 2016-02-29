@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
     private List<TeamType> teams;
     public List<GameObject> playergo;
     public List<PlayerManager> players;
-
+	public List<GameObject> playeringame;
     //Which team holds the ball
 
     // Use this for initialization
@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour {
                 team.player_id = i;
                 //Debug.Log (team.Team);
                 players.Add(team);
+				playeringame.Add (go);
             }
         }
         else if (gmtype == gameType.TvT) {
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour {
                     }
                 }
                 players.Add(team);
+				playeringame.Add (go);
             }
         }
         else if (gmtype == gameType.OvT) {
@@ -147,6 +149,7 @@ public class GameManager : MonoBehaviour {
                 }
 
                 players.Add(team);
+				playeringame.Add (go);
             }
 
         }

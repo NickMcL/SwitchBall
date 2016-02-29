@@ -37,6 +37,7 @@ public class PlayerManager : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.tag == "OddBall") {
             OddBall.Instance.OnHitPlayer(this);
+			Camera.main.GetComponent<cameraFollow> ().onHitOddBall(this);
         }
         if (coll.gameObject.tag == "Boundary") {
             if (OddBall.Instance.BelongTo == this) {
