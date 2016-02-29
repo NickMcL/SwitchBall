@@ -10,6 +10,6 @@ public class Score : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        this.GetComponent<TextMesh>().text = this.GetComponentInParent<PlayerManager>().Score.ToString();
+        this.GetComponent<TextMesh>().text = Mathf.RoundToInt(this.GetComponentInParent<PlayerManager>().Score).ToString();
 	}
 }
