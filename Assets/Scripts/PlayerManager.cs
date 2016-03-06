@@ -48,7 +48,7 @@ public class PlayerManager : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D coll) {
         if (coll.gameObject.tag == "OddBall") {
             OddBall.Instance.OnHitPlayer(this);
-			Camera.main.GetComponent<cameraFollow>().onHitOddBall(this);
+			Camera.main.GetComponent<CameraFollow>().onHitOddBall(this);
         }
         if (coll.gameObject.tag == "Bullet") {
             Bullet hit_bullet = coll.gameObject.GetComponent<Bullet>();

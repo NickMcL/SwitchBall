@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class cameraFollow : MonoBehaviour {
+
+public class CameraFollow : MonoBehaviour {
 	float minX = Mathf.Infinity;
 	float maxX = -Mathf.Infinity;
 	float minY = Mathf.Infinity;
@@ -12,7 +13,7 @@ public class cameraFollow : MonoBehaviour {
 	float delay =0.05f;
 
 	public bool zoom=false;
-	static public cameraFollow Instance;
+	static public CameraFollow Instance;
 	public Camera cameraMain;
 	public Transform cameraTx;
 	public float camSpeed=5f;
