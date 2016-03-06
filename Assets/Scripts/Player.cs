@@ -41,7 +41,7 @@ public class Player : MonoBehaviour {
 		if (SystemInfo.operatingSystem.StartsWith("Windows")) {
 	        pad_state = GamePad.GetState((PlayerIndex) player);
 		}
-        if (this.GetComponent<PlayerManager>().death == true)
+		if (this.GetComponent<PlayerManager>().death ||cameraFollow.Instance.zoom)
             return;
         if (Input.GetKeyDown(KeyCode.Q)) {
             useController = true;
