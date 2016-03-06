@@ -10,6 +10,7 @@ public class cameraFollow : MonoBehaviour {
 	float cameraSpeed=1.5f;
 	float camSize;
 	float delay =0.05f;
+	Vector3 oddPos;
 
 	public bool zoom=false;
 	static public cameraFollow Instance;
@@ -36,7 +37,9 @@ public class cameraFollow : MonoBehaviour {
 		cameraMain = Camera.main;
 		cameraTx = cameraMain.transform;
 	}
-
+	void Start(){
+		oddPos = OddBall.Instance.transform.position;
+	}
 
 	
 	// Update is called once per frame
@@ -76,6 +79,16 @@ public class cameraFollow : MonoBehaviour {
 			if (pos.y > maxY)
 				maxY = pos.y;
 		}
+		if (oddPos.x < minX)
+			minX = oddPos.x;
+		if (oddPos.x > maxX)
+			maxX = oddPos.x;
+		if (oddPos.y < minY)
+			minY = oddPos.y;
+		if (oddPos.y > maxY)
+			maxY = oddPos.y;
+			
+	
 
 	}
 	float  positionCamera(){
