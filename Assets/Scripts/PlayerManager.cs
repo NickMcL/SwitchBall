@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour {
     private SpriteRenderer render;
     public int player_id;
     public Sprite noteam, redteam, blueteam;
+	public bool visible;
     public bool death;
     public bool change;
 
@@ -28,6 +29,7 @@ public class PlayerManager : MonoBehaviour {
         death = false;
         render = this.GetComponent<SpriteRenderer>();
         change = true;
+		visible = true;
     }
 
     void Update() {
@@ -40,12 +42,15 @@ public class PlayerManager : MonoBehaviour {
                 OddBall.Instance.Initial();
 
             }
+			visible = false;
             death = true;
             Invoke("respawn", GameManager.Instance.respawn_time);
         }
     }
 
     void OnTriggerEnter2D(Collider2D coll) {
+		if (coll.gameObject.tag == "camBoundary")
+			visible = false;
         if (coll.gameObject.tag == "OddBall") {
             OddBall.Instance.OnHitPlayer(this);
 			Camera.main.GetComponent<CameraFollow>().onHitOddBall(this);
