@@ -6,6 +6,8 @@ public class cameraFollow : MonoBehaviour {
 	float maxX = -Mathf.Infinity;
 	float minY = Mathf.Infinity;
 	float maxY = Mathf.Infinity;
+	float minCamSize=8.0f;
+	float cameraSpeed=1.5f;
 	float camSize;
 	float delay =0.05f;
 	bool zoom=false;
@@ -13,7 +15,7 @@ public class cameraFollow : MonoBehaviour {
 	public Transform cameraTx;
 	public float camSpeed=5f;
 
-	public Vector2 cameraBuffer=new Vector2(0,2);
+	public Vector2 cameraBuffer=new Vector2(0,4);
 
 	public static class CoroutineUtil
 	{
@@ -45,7 +47,7 @@ public class cameraFollow : MonoBehaviour {
 	void calculateBound(){
 		bool alldown = true;
 		foreach (GameObject player in GameManager.Instance.playeringame) {
-			if (player.transform.position.y > -6)
+			if (!player.GetComponent<PlayerManager>().death)
 				alldown = false;	
 		}
 		if (alldown) {
@@ -59,7 +61,7 @@ public class cameraFollow : MonoBehaviour {
 	foreach (GameObject player in GameManager.Instance.playeringame ) {
 			
 			Vector3 pos = player.transform.position;
-			if (pos.y < -6)
+			if (player.GetComponent<PlayerManager>().death)
 				continue;
 		
 			if (pos.x < minX)
@@ -95,14 +97,14 @@ public class cameraFollow : MonoBehaviour {
 
 		//}
 
-		transform.position = Vector3.Lerp (transform.position, cameraPosition, delay*0.8f);
+		transform.position = Vector3.Lerp (transform.position, cameraPosition, delay*cameraSpeed);
 
 
 
 		camSize = (sizeX > sizeY ? sizeX : sizeY);
-		if (camSize < 6)
-			camSize = 6;
-		cameraMain.orthographicSize = Mathf.Lerp(cameraMain.orthographicSize,camSize*0.6f,delay*0.8f) ;
+		if (camSize < minCamSize)
+			camSize = minCamSize;
+		cameraMain.orthographicSize = Mathf.Lerp(cameraMain.orthographicSize,camSize*0.6f,delay*cameraSpeed) ;
 		return camSize * 0.6f;
 
 	}
