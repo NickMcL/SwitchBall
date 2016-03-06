@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour {
     private SpriteRenderer render;
     public int player_id;
     public Sprite noteam, redteam, blueteam;
+	public bool visible;
     public bool death;
     public bool change;
 

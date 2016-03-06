@@ -54,7 +54,7 @@ public class CameraFollow : MonoBehaviour {
 	void calculateBound(){
 		bool alldown = true;
 		foreach (GameObject player in GameManager.Instance.playeringame) {
-			if (!player.GetComponent<PlayerManager>().death)
+			if (!player.GetComponent<PlayerManager>().visible)
 				alldown = false;	
 		}
 		if (alldown) {
