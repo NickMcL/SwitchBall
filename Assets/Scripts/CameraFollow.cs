@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class cameraFollow : MonoBehaviour {
+
+public class CameraFollow : MonoBehaviour {
 	float minX = Mathf.Infinity;
 	float maxX = -Mathf.Infinity;
 	float minY = Mathf.Infinity;
@@ -10,7 +11,10 @@ public class cameraFollow : MonoBehaviour {
 	float cameraSpeed=1.5f;
 	float camSize;
 	float delay =0.05f;
-	bool zoom=false;
+	Vector3 oddPos;
+
+	public bool zoom=false;
+	static public CameraFollow Instance;
 	public Camera cameraMain;
 	public Transform cameraTx;
 	public float camSpeed=5f;
@@ -30,10 +34,13 @@ public class cameraFollow : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Awake () {
+		Instance = this;
 		cameraMain = Camera.main;
 		cameraTx = cameraMain.transform;
 	}
-
+	void Start(){
+		oddPos = OddBall.Instance.transform.position;
+	}
 
 	
 	// Update is called once per frame
@@ -73,6 +80,16 @@ public class cameraFollow : MonoBehaviour {
 			if (pos.y > maxY)
 				maxY = pos.y;
 		}
+		if (oddPos.x < minX)
+			minX = oddPos.x;
+		if (oddPos.x > maxX)
+			maxX = oddPos.x;
+		if (oddPos.y < minY)
+			minY = oddPos.y;
+		if (oddPos.y > maxY)
+			maxY = oddPos.y;
+			
+	
 
 	}
 	float  positionCamera(){

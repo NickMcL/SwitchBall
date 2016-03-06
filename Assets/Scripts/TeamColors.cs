@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class TeamColors : MonoBehaviour {
     public static Color TEAM_A = Color.red;
     public static Color TEAM_B = Color.blue;
-    public static Color NO_TEAM = Color.gray;
+    public static Color NO_TEAM = Color.black;
 
     public static Dictionary<GameManager.TeamType, Color> TEAM_COLOR_MAP =
         new Dictionary<GameManager.TeamType, Color>() {
