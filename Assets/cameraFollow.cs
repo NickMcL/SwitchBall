@@ -10,7 +10,9 @@ public class cameraFollow : MonoBehaviour {
 	float cameraSpeed=1.5f;
 	float camSize;
 	float delay =0.05f;
-	bool zoom=false;
+
+	public bool zoom=false;
+	static public cameraFollow Instance;
 	public Camera cameraMain;
 	public Transform cameraTx;
 	public float camSpeed=5f;
@@ -30,6 +32,7 @@ public class cameraFollow : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Awake () {
+		Instance = this;
 		cameraMain = Camera.main;
 		cameraTx = cameraMain.transform;
 	}
