@@ -35,10 +35,6 @@ public class PlayerManager : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D coll) {
-        if (coll.gameObject.tag == "OddBall") {
-            OddBall.Instance.OnHitPlayer(this);
-			Camera.main.GetComponent<cameraFollow> ().onHitOddBall(this);
-        }
         if (coll.gameObject.tag == "Boundary") {
             if (OddBall.Instance.BelongTo == this) {
                 OddBall.Instance.Initial();
@@ -47,10 +43,13 @@ public class PlayerManager : MonoBehaviour {
             death = true;
             Invoke("respawn", GameManager.Instance.respawn_time);
         }
-
     }
 
     void OnTriggerEnter2D(Collider2D coll) {
+        if (coll.gameObject.tag == "OddBall") {
+            OddBall.Instance.OnHitPlayer(this);
+			Camera.main.GetComponent<cameraFollow>().onHitOddBall(this);
+        }
         if (coll.gameObject.tag == "Bullet") {
             Bullet hit_bullet = coll.gameObject.GetComponent<Bullet>();
             if (hit_bullet.source_player_id == player_id ||

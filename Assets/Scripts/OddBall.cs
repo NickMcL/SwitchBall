@@ -24,7 +24,8 @@ public class OddBall : MonoBehaviour {
 
     public void Initial() {
         this.transform.SetParent(null);
-        Vector3 pos = new Vector3(0f, 0f, 0f);
+        //Vector3 pos = new Vector3(0f, 0f, 0f);
+        Vector3 pos = new Vector2(Random.Range(-10f, 10f), 6f);
         this.transform.position = pos;
         this.BelongTo = null;
         this.GetComponent<CircleCollider2D>().enabled = true;
