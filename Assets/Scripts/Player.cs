@@ -14,6 +14,8 @@ public class Player : MonoBehaviour {
     public float move_accel = 4.0f;
     public float max_velocity = 7.0f;
     public float jump_scale_factor = 3.0f;
+    public float jump_accel;
+    Vector2 platform_below_velocity;
 
     public int player;
     public bool useController;
@@ -21,13 +23,13 @@ public class Player : MonoBehaviour {
     public bool right_trigger_down = false;
     public bool jump_reset;
 
-    public float jump_accel;
-
+    BoxCollider2D player_collider;
     GamePadState pad_state;
 
     // Use this for initialization
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
+        player_collider = GetComponent<BoxCollider2D>();
         inAir = false;
         jump_accel = rigid.gravityScale * jump_scale_factor;
         jump_reset = false;
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour {
 
         jump_accel = 33f;
         move_accel = 100f;
+        platform_below_velocity = Vector2.zero;
     }
 
     void Update() {
@@ -54,6 +57,7 @@ public class Player : MonoBehaviour {
         }
         updateMovement();
         updateJump();
+        moveWithPlatform();
     }
 
     void updateMovement() {
@@ -70,15 +74,19 @@ public class Player : MonoBehaviour {
             x_direction = a ? -1 : (d ? 1 : 0);
         }
 
-        if (rigid.velocity.magnitude < max_velocity || rigid.velocity.x * x_direction <= 0.0f) {
+        if ((rigid.velocity.magnitude - platform_below_velocity.magnitude) < max_velocity ||
+                rigid.velocity.x * x_direction <= 0.0f) {
             rigid.AddForce(new Vector2(x_direction, 0f) * move_accel);
         }
-        if (Mathf.Abs(rigid.velocity.x) < 2.0f) {
+        if (Mathf.Abs(rigid.velocity.x) < 1.0f) {
             rigid.velocity = new Vector2(0f, rigid.velocity.y);
         }
     }
 
     void updateJump() {
+        if (getTerrainBelow() != null && rigid.velocity.y <= 0f) {
+            inAir = false;
+        }
         if (pad_state.Triggers.Right < 0.1f) {
             jump_reset = true;
         }
@@ -90,26 +98,46 @@ public class Player : MonoBehaviour {
             jump();
             has_triggered = true;
             jump_reset = false;
-        }
-        else if (Input.GetKeyDown(JUMP_KEY) && (!inAir)) {
+        } else if (Input.GetKeyDown(JUMP_KEY) && (!inAir)) {
             jump();
         }
         right_trigger_down = false;
     }
 
     void jump() {
-        //rigid.velocity = new Vector2(rigid.velocity.x, rigid.velocity.y + jump_speed);
+        rigid.velocity = new Vector2(rigid.velocity.x, 0f);
         rigid.AddForce(new Vector2(0f, 1f) * jump_accel, ForceMode2D.Impulse);
         inAir = true;
     }
 
-    void OnCollisionEnter2D(Collision2D other) {
-        if (other.collider.tag == "LevelTerrain" || other.collider.tag == "Player") {
-            inAir = false;
+    void moveWithPlatform() {
+        GameObject terrainBelow = getTerrainBelow();
+        if (terrainBelow != null && terrainBelow.tag == "Platform") {
+            this.transform.parent = terrainBelow.transform;
+        } else {
+            this.transform.parent = null;
         }
     }
 
-    public void knockback(Vector2 direction) {
+    GameObject getTerrainBelow() {
+        RaycastHit2D right_hit, left_hit;
+        Vector2 collider_right_corner = new Vector2(
+            player_collider.bounds.center.x + player_collider.bounds.extents.x - 0.1f,
+            player_collider.bounds.center.y - player_collider.bounds.extents.y - 0.01f);
 
+        Vector2 collider_left_corner = new Vector2(
+            player_collider.bounds.center.x - player_collider.bounds.extents.x + 0.1f,
+            player_collider.bounds.center.y - player_collider.bounds.extents.y - 0.01f);
+
+        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.down, 0.1f);
+        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.down, 0.1f);
+        Debug.DrawRay(collider_right_corner, Vector2.down * 0.1f);
+        Debug.DrawRay(collider_left_corner, Vector2.down * 0.1f);
+        if (right_hit.collider != null) {
+            return right_hit.collider.gameObject;
+        } else if (left_hit.collider != null) {
+            return left_hit.collider.gameObject;
+        }
+        return null;
     }
 }
