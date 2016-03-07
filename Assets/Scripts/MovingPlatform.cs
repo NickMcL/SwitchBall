@@ -64,4 +64,8 @@ public class MovingPlatform : MonoBehaviour {
         // slow down near the edges
         rigid.velocity = change * (1.25f - u);
     }
+
+    public Vector2 getCurrentVelocity() {
+        return rigid.velocity;
+    }
 }

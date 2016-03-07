@@ -19,12 +19,15 @@ public class LerpPlatform : MonoBehaviour {
 
         this.transform.position = Vector2.Lerp(start, end, u);
 
-        if (u >= 1.0f)
-        {
+        if (u >= 1.0f) {
             Vector2 temp = end;
             end = start;
             start = temp;
             startTime = Time.time;
         }
+    }
+
+    public Vector2 getCurrentVelocity() {
+        return (end - start) / duration;
     }
 }
