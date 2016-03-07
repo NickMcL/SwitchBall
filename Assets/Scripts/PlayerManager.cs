@@ -49,7 +49,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D coll) {
-		if (coll.gameObject.tag == "camBoundary")
+		if (coll.gameObject.tag == "CameraBoundary")
 			visible = false;
         if (coll.gameObject.tag == "OddBall") {
             OddBall.Instance.OnHitPlayer(this);

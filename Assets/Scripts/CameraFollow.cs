@@ -37,10 +37,10 @@ public class CameraFollow : MonoBehaviour {
 		Instance = this;
 		cameraMain = Camera.main;
 		cameraTx = cameraMain.transform;
+		camSize = 7.0f;
+
 	}
-	void Start(){
-		oddPos = OddBall.Instance.transform.position;
-	}
+
 
 	
 	// Update is called once per frame
@@ -52,9 +52,10 @@ public class CameraFollow : MonoBehaviour {
 	}
 
 	void calculateBound(){
+		oddPos = OddBall.Instance.transform.position;
 		bool alldown = true;
 		foreach (GameObject player in GameManager.Instance.playeringame) {
-			if (!player.GetComponent<PlayerManager>().visible)
+			if (player.GetComponent<PlayerManager>().visible)
 				alldown = false;	
 		}
 		if (alldown) {
@@ -68,7 +69,7 @@ public class CameraFollow : MonoBehaviour {
 	foreach (GameObject player in GameManager.Instance.playeringame ) {
 			
 			Vector3 pos = player.transform.position;
-			if (player.GetComponent<PlayerManager>().death)
+			if (!player.GetComponent<PlayerManager>().visible)
 				continue;
 		
 			if (pos.x < minX)
@@ -88,9 +89,7 @@ public class CameraFollow : MonoBehaviour {
 			minY = oddPos.y;
 		if (oddPos.y > maxY)
 			maxY = oddPos.y;
-			
 	
-
 	}
 	float  positionCamera(){
 		float sizeX, sizeY;
