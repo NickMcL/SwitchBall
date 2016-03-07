@@ -3,11 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CameraFollow : MonoBehaviour {
-	float minX = Mathf.Infinity;
-	float maxX = -Mathf.Infinity;
-	float minY = Mathf.Infinity;
-	float maxY = Mathf.Infinity;
-	float minCamSize=8.0f;
+//	float minX = Mathf.Infinity;
+//	float maxX = -Mathf.Infinity;
+//	float minY = Mathf.Infinity;
+//	float maxY = Mathf.Infinity;
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
+	public float minCamSize=8.0f;
 	float cameraSpeed=1.5f;
 	float camSize;
 	float delay =0.05f;
@@ -37,7 +41,8 @@ public class CameraFollow : MonoBehaviour {
 		Instance = this;
 		cameraMain = Camera.main;
 		cameraTx = cameraMain.transform;
-		camSize = 7.0f;
+
+	
 
 	}
 
@@ -117,9 +122,10 @@ public class CameraFollow : MonoBehaviour {
 
 
 
-		camSize = (sizeX > sizeY ? sizeX : sizeY);
+		camSize = sizeX >= sizeY ? sizeX : sizeY;
 		if (camSize < minCamSize)
 			camSize = minCamSize;
+
 		cameraMain.orthographicSize = Mathf.Lerp(cameraMain.orthographicSize,camSize*0.6f,delay*cameraSpeed) ;
 		return camSize * 0.6f;
 
