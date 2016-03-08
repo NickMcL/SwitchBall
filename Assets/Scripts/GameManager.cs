@@ -175,8 +175,7 @@ public class GameManager : MonoBehaviour {
             if (pm == OddBall.Instance.BelongTo) {
                 pm.Score += 1 + mode_bonus;
                 ball_player = pm;
-            }
-            else if (pm.Team == OddBall.Instance.BelongTo.Team) {
+            } else if (pm.Team == OddBall.Instance.BelongTo.Team) {
                 pm.Score += mode_bonus;
             } else {
                 ++nonscoring_players;

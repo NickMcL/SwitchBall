@@ -44,11 +44,12 @@ public class FireBullet : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-		if (SystemInfo.operatingSystem.StartsWith("Windows")) {
-			pad_state = GamePad.GetState((PlayerIndex) player);
-		}
-		if (this.GetComponent<PlayerManager> ().death == true)
-			return;
+        if (SystemInfo.operatingSystem.StartsWith("Windows")) {
+            pad_state = GamePad.GetState((PlayerIndex)player);
+        }
+        if (this.GetComponent<PlayerManager>().death == true) {
+            return;
+        }
         updateFireDirection();
         updateSwapAttack();
     }
@@ -66,8 +67,7 @@ public class FireBullet : MonoBehaviour {
         if (player_comp.useController) {
             fire_bullet_vector.x += x_look_val;
             fire_bullet_vector.y += y_look_val;
-        }
-        else {
+        } else {
             if (Input.GetKey(FIRE_LEFT_KEY)) {
                 fire_bullet_vector.x -= 1;
             }
@@ -82,14 +82,12 @@ public class FireBullet : MonoBehaviour {
             }
         }
         fire_bullet_vector = fire_bullet_vector.normalized;
-        
-        if (player_comp.useController && (0.5f <= Mathf.Abs(x_look_val) || 0.5f <= Mathf.Abs(y_look_val)) &&
-                fire_bullets == null && fire_delay_exceeded && OddBall.Instance.BelongTo != player_manager_comp) {
+
+        if (fire_bullet_vector != Vector2.zero && fire_bullets == null && fire_delay_exceeded &&
+                OddBall.Instance.BelongTo != player_manager_comp) {
             fire_bullets = StartCoroutine(fireBullets());
-        } else if (!player_comp.useController && fire_bullet_vector != Vector2.zero &&
-                fire_bullets == null && fire_delay_exceeded && OddBall.Instance.BelongTo != player_manager_comp) {
-            fire_bullets = StartCoroutine(fireBullets());
-        } else if (fire_bullets != null) {
+        } else if (fire_bullets != null &&
+                (fire_bullet_vector == Vector2.zero || OddBall.Instance.BelongTo == player_manager_comp)) {
             StopCoroutine(fire_bullets);
             fire_bullets = null;
             stop_bullet_fire_time = Time.time;
@@ -120,7 +118,7 @@ public class FireBullet : MonoBehaviour {
         new_swap_attack.GetComponent<SwapAttack>().source_player_id = this.GetComponent<PlayerManager>().player_id;
         new_swap_attack.GetComponent<SwapAttack>().movement_vector = fire_bullet_vector;
         new_swap_attack.transform.position = this.transform.position;
-		new_swap_attack.GetComponent<SwapAttack>().bullet_team = this.GetComponent<PlayerManager>().Team;
+        new_swap_attack.GetComponent<SwapAttack>().bullet_team = this.GetComponent<PlayerManager>().Team;
         swap_attack_cooldown_start = Time.time;
     }
 }
