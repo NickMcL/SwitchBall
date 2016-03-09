@@ -6,7 +6,7 @@ public class OddBall : MonoBehaviour {
     public Vector3[] spawnLocations;
 
     public static OddBall Instance;
-
+	[SerializeField]
     private PlayerManager _belongTo;
 
     public PlayerManager BelongTo {
@@ -31,12 +31,14 @@ public class OddBall : MonoBehaviour {
         this.transform.position = pos;
         this.BelongTo = null;
         this.GetComponent<CircleCollider2D>().enabled = true;
+		this.transform.GetChild(0).GetComponent<CircleCollider2D> ().enabled = true;
     }
 
     public void OnHitPlayer(PlayerManager pm) {
         OddBall.Instance.BelongTo = pm;
         OddBall.Instance.transform.SetParent(pm.gameObject.transform);
         OddBall.Instance.GetComponent<CircleCollider2D>().enabled = false;
+		this.transform.GetChild(0).GetComponent<CircleCollider2D> ().enabled = false;
         OddBall.Instance.transform.localPosition = new Vector3(-0.1f, 4.5f, 0f);
 		AudioSource GrabGold = this.GetComponent<AudioSource>();
 		GrabGold.Play();
