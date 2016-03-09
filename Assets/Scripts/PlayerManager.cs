@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 
-    private float _score;
+	private int  _score;
     private GameManager.TeamType _team;
     private SpriteRenderer render;
     public int player_id;
@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviour {
     public Vector3 StartPosition { get; set; }
 
 
-    public float Score {
+    public int Score {
         get { return _score; }
         set { _score = value; }
     }
