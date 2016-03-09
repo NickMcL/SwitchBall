@@ -17,10 +17,9 @@ public class Player : MonoBehaviour {
 
     public Rigidbody2D rigid;
     public bool inAir;
-    public float base_move_accel = 100f;
-    public float base_max_velocity = 7.0f;
-    public float base_jump_accel = 25f;
-    public float current_move_accel;
+    public float base_max_velocity = 7f;
+    public float base_jump_accel = 33f;
+    public float current_move_accel = 100f;
     public float current_max_velocity;
     public float current_jump_accel;
 
@@ -44,8 +43,9 @@ public class Player : MonoBehaviour {
         jump_reset = false;
         useController = true;
 
-        //base_jump_accel = 25f;
-        //base_move_accel = 100f;
+        current_move_accel = 100f;
+        base_max_velocity = 7f;
+        base_jump_accel = 33f;
         platform_below_velocity = Vector2.zero;
     }
 
@@ -73,7 +73,6 @@ public class Player : MonoBehaviour {
 
     void updateMovementValuesBasedOnTeam() {
         int teammate_total = GameManager.Instance.getTeammateTotal(pm);
-        current_move_accel = base_move_accel;
         current_max_velocity = base_max_velocity * MOVE_PENALTY_PER_TEAMMATE_TOTAL[teammate_total];
         current_jump_accel = base_jump_accel * MOVE_PENALTY_PER_TEAMMATE_TOTAL[teammate_total];
     }
@@ -102,10 +101,14 @@ public class Player : MonoBehaviour {
     }
 
     void updateJump() {
-        if (getTerrainBelow() != null && rigid.velocity.y <= 0f) {
+        if (getTerrainBelow() != null && rigid.velocity.y <= 0.1f) {
             inAir = false;
         }
         if (pad_state.Triggers.Right < 0.1f) {
+            if (!jump_reset && rigid.velocity.y > 1.0f) {
+                //rigid.velocity = new Vector2(rigid.velocity.x, 0f);
+                rigid.AddForce(Vector2.down * rigid.velocity.y * 0.6f, ForceMode2D.Impulse);
+            }
             jump_reset = true;
         }
 		if (pad_state.Triggers.Right > 0.1f) {
@@ -124,7 +127,7 @@ public class Player : MonoBehaviour {
 
     void jump() {
         rigid.velocity = new Vector2(rigid.velocity.x, 0f);
-        rigid.AddForce(new Vector2(0f, 1f) * current_jump_accel, ForceMode2D.Impulse);
+        rigid.AddForce(Vector2.up * current_jump_accel, ForceMode2D.Impulse);
         inAir = true;
     }
 
