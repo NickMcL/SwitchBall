@@ -40,19 +40,22 @@ public class PlayerManager : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Boundary") {
-			if (OddBall.Instance.BelongTo == this) {
-				OddBall.Instance.Initial();
 
-			}
 			visible = false;
 			death = true;
 			Invoke("respawn", GameManager.Instance.respawn_time);
 		}
-		if (coll.gameObject.tag == "CameraBoundary")
+		if (coll.gameObject.tag == "CameraBoundary") {
 			visible = false;
+			if (OddBall.Instance.BelongTo == this) {
+				OddBall.Instance.Initial ();
+
+			}
+		}
         if (coll.gameObject.tag == "OddBall") {
-            OddBall.Instance.OnHitPlayer(this);
 			Camera.main.GetComponent<CameraFollow>().onHitOddBall(this);
+			OddBall.Instance.OnHitPlayer(this);
+
         }
         if (coll.gameObject.tag == "Bullet") {
             Bullet hit_bullet = coll.gameObject.GetComponent<Bullet>();
