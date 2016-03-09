@@ -19,6 +19,7 @@ public class playerScore : MonoBehaviour {
 		player = GameManager.Instance.playeringame [playerid];
 		int score = player.GetComponent<PlayerManager> ().Score;
 		this.GetComponent<Text> ().text =score.ToString();
+		this.GetComponent<Text> ().color = TeamColors.TEAM_COLOR_MAP [player.GetComponent<PlayerManager> ().Team];
 		if (score > maxscore)
 			maxscore = score;
 		if (score == maxscore && score > 80) {
