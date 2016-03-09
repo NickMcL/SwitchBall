@@ -36,6 +36,7 @@ public class OddBall : MonoBehaviour {
         this.transform.position = pos;
         this.BelongTo = null;
         this.GetComponent<CircleCollider2D>().enabled = true;
+		this.transform.GetChild(0).GetComponent<CircleCollider2D> ().enabled = true;
 
 
     }
