@@ -38,6 +38,9 @@ public class OddBall : MonoBehaviour {
         OddBall.Instance.transform.SetParent(pm.gameObject.transform);
         OddBall.Instance.GetComponent<CircleCollider2D>().enabled = false;
         OddBall.Instance.transform.localPosition = new Vector3(-0.1f, 4.5f, 0f);
+		AudioSource GrabGold = this.GetComponent<AudioSource>();
+		GrabGold.Play();
+
     }
 
     void setupColor() {

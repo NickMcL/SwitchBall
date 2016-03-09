@@ -64,6 +64,9 @@ public class PlayerManager : MonoBehaviour {
             if (OddBall.Instance.BelongTo == this) {
                 OddBall.Instance.Initial();
             }
+			AudioSource bulletHit = GameObject.Find("BulletHitSound").GetComponent<AudioSource>();
+			bulletHit.Play();
+
             this.GetComponent<Rigidbody2D>().AddForce(coll.gameObject.GetComponent<Bullet>().movement_vector * 10f, ForceMode2D.Impulse);
         }
     }
