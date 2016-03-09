@@ -36,19 +36,18 @@ public class PlayerManager : MonoBehaviour {
         setColor();
     }
 
-    void OnCollisionEnter2D(Collision2D coll) {
-        if (coll.gameObject.tag == "Boundary") {
-            if (OddBall.Instance.BelongTo == this) {
-                OddBall.Instance.Initial();
-
-            }
-			visible = false;
-            death = true;
-            Invoke("respawn", GameManager.Instance.respawn_time);
-        }
-    }
+    
 
     void OnTriggerEnter2D(Collider2D coll) {
+		if (coll.gameObject.tag == "Boundary") {
+			if (OddBall.Instance.BelongTo == this) {
+				OddBall.Instance.Initial();
+
+			}
+			visible = false;
+			death = true;
+			Invoke("respawn", GameManager.Instance.respawn_time);
+		}
 		if (coll.gameObject.tag == "CameraBoundary")
 			visible = false;
         if (coll.gameObject.tag == "OddBall") {
