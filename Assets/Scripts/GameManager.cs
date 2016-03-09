@@ -234,4 +234,14 @@ public class GameManager : MonoBehaviour {
         PlayerPrefs.SetInt("winner", pm.player_id);
         SceneManager.LoadScene("_Scene_End");
     }
+
+    public int getTeammateTotal(PlayerManager player) {
+        int teammate_total = -1;
+        foreach (PlayerManager pm in players) {
+            if (pm.Team == player.Team) {
+                ++teammate_total;
+            }
+        }
+        return teammate_total;
+    }
 }
