@@ -111,6 +111,7 @@ public class PlayerManager : MonoBehaviour {
     public void respawn() {
         this.transform.position = StartPosition;
         death = false;
+		visible = true;
     }
 
     public void setColor() {
