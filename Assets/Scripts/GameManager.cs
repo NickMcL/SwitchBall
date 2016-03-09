@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     private List<TeamType> teams;
     public List<GameObject> playergo;
     public List<PlayerManager> players;
+	[SerializeField]
 	public List<GameObject> playeringame;
     //Which team holds the ball
 
