@@ -3,6 +3,12 @@ using System.Collections;
 using XInputDotNetPure;
 
 public class Player : MonoBehaviour {
+    static float[] MOVE_PENALTY_PER_TEAMMATE_TOTAL = {
+        1.0f,
+        0.88f,
+        0.75f
+    };
+
     const KeyCode MOVE_LEFT_KEY = KeyCode.A;
     const KeyCode MOVE_DOWN_KEY = KeyCode.S;
     const KeyCode MOVE_RIGHT_KEY = KeyCode.D;
@@ -11,11 +17,12 @@ public class Player : MonoBehaviour {
 
     public Rigidbody2D rigid;
     public bool inAir;
-    public float move_accel = 4.0f;
-    public float max_velocity = 7.0f;
-    public float jump_scale_factor = 3.0f;
-    public float jump_accel;
-    Vector2 platform_below_velocity;
+    public float base_move_accel = 100f;
+    public float base_max_velocity = 7.0f;
+    public float base_jump_accel = 25f;
+    public float current_move_accel;
+    public float current_max_velocity;
+    public float current_jump_accel;
 
     public int player;
     public bool useController;
@@ -23,20 +30,22 @@ public class Player : MonoBehaviour {
     public bool right_trigger_down = false;
     public bool jump_reset;
 
+    Vector2 platform_below_velocity;
     BoxCollider2D player_collider;
+    PlayerManager pm;
     GamePadState pad_state;
 
     // Use this for initialization
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         player_collider = GetComponent<BoxCollider2D>();
+        pm = GetComponent<PlayerManager>();
         inAir = false;
-        jump_accel = rigid.gravityScale * jump_scale_factor;
         jump_reset = false;
         useController = true;
 
-        jump_accel = 33f;
-        move_accel = 100f;
+        //base_jump_accel = 25f;
+        //base_move_accel = 100f;
         platform_below_velocity = Vector2.zero;
     }
 
@@ -55,9 +64,18 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.P)) {
             useController = false;
         }
+
+        updateMovementValuesBasedOnTeam();
         updateMovement();
         updateJump();
         moveWithPlatform();
+    }
+
+    void updateMovementValuesBasedOnTeam() {
+        int teammate_total = GameManager.Instance.getTeammateTotal(pm);
+        current_move_accel = base_move_accel;
+        current_max_velocity = base_max_velocity * MOVE_PENALTY_PER_TEAMMATE_TOTAL[teammate_total];
+        current_jump_accel = base_jump_accel * MOVE_PENALTY_PER_TEAMMATE_TOTAL[teammate_total];
     }
 
     void updateMovement() {
@@ -74,9 +92,9 @@ public class Player : MonoBehaviour {
             x_direction = a ? -1 : (d ? 1 : 0);
         }
 
-        if ((rigid.velocity.magnitude - platform_below_velocity.magnitude) < max_velocity ||
+        if ((rigid.velocity.magnitude - platform_below_velocity.magnitude) < current_max_velocity ||
                 rigid.velocity.x * x_direction <= 0.0f) {
-            rigid.AddForce(new Vector2(x_direction, 0f) * move_accel);
+            rigid.AddForce(new Vector2(x_direction, 0f) * current_move_accel);
         }
         if (Mathf.Abs(rigid.velocity.x) < 1.0f) {
             rigid.velocity = new Vector2(0f, rigid.velocity.y);
@@ -106,7 +124,7 @@ public class Player : MonoBehaviour {
 
     void jump() {
         rigid.velocity = new Vector2(rigid.velocity.x, 0f);
-        rigid.AddForce(new Vector2(0f, 1f) * jump_accel, ForceMode2D.Impulse);
+        rigid.AddForce(new Vector2(0f, 1f) * current_jump_accel, ForceMode2D.Impulse);
         inAir = true;
     }
 
