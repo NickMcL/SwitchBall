@@ -28,6 +28,7 @@ public class Player : MonoBehaviour {
     public bool has_triggered = false;
     public bool right_trigger_down = false;
     public bool jump_reset;
+    public GameObject passing_through_platform;
 
     Vector2 platform_below_velocity;
     BoxCollider2D player_collider;
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour {
         inAir = false;
         jump_reset = false;
         useController = true;
+        passing_through_platform = null;
 
         current_move_accel = 100f;
         base_max_velocity = 7f;
@@ -69,6 +71,9 @@ public class Player : MonoBehaviour {
         updateMovement();
         updateJump();
         moveWithPlatform();
+        if (inAir) {
+            checkPassingThroughPlatform();
+        }
     }
 
     void updateMovementValuesBasedOnTeam() {
@@ -101,7 +106,7 @@ public class Player : MonoBehaviour {
     }
 
     void updateJump() {
-        if (getTerrainBelow() != null && rigid.velocity.y <= 0.1f) {
+        if (getTerrainBelow() != null && rigid.velocity.y <= 0.2f) {
             inAir = false;
         }
         if (pad_state.Triggers.Right < 0.1f) {
@@ -132,11 +137,54 @@ public class Player : MonoBehaviour {
     }
 
     void moveWithPlatform() {
-        GameObject terrainBelow = getTerrainBelow();
-        if (terrainBelow != null && terrainBelow.tag == "Platform") {
-            this.transform.parent = terrainBelow.transform;
+        GameObject terrain_below = getTerrainBelow();
+        if (terrain_below != null && terrain_below.tag == "Platform") {
+            this.transform.parent = terrain_below.transform;
         } else {
             this.transform.parent = null;
+        }
+    }
+
+    void checkPassingThroughPlatform() {
+        GameObject terrain_above = getTerrainAbove();
+        GameObject terrain_below = getTerrainBelow();
+        if (passing_through_platform == null && terrain_above != null &&
+                (terrain_above.tag == "LevelTerrain" || terrain_above.tag == "Platform")) {
+            passing_through_platform = terrain_above;
+            changeLayerToNotHitTerrain();
+            return;
+        }
+
+        if (passing_through_platform != null && !(
+                (terrain_above != null && (terrain_above.tag == "LevelTerrain" || terrain_above.tag == "Platform")) ||
+                (terrain_below != null && (terrain_below.tag == "LevelTerrain" || terrain_below.tag == "Platform")) ||
+                (player_collider.bounds.Intersects(passing_through_platform.GetComponent<BoxCollider2D>().bounds)))) {
+            passing_through_platform = null;
+            changeLayerToHitTerrain();
+        }
+    }
+
+    void changeLayerToNotHitTerrain() {
+        if (gameObject.layer == LayerMask.NameToLayer("Player")) {
+            gameObject.layer = LayerMask.NameToLayer("PlayerNoTerrain");
+        }
+        else if (gameObject.layer == LayerMask.NameToLayer("TeamAPlayer")) {
+            gameObject.layer = LayerMask.NameToLayer("TeamAPlayerNoTerrain");
+        }
+        else if (gameObject.layer == LayerMask.NameToLayer("TeamBPlayer")) {
+            gameObject.layer = LayerMask.NameToLayer("TeamBPlayerNoTerrain");
+        }
+    }
+
+    void changeLayerToHitTerrain() {
+        if (gameObject.layer == LayerMask.NameToLayer("PlayerNoTerrain")) {
+            gameObject.layer = LayerMask.NameToLayer("Player");
+        }
+        else if (gameObject.layer == LayerMask.NameToLayer("TeamAPlayerNoTerrain")) {
+            gameObject.layer = LayerMask.NameToLayer("TeamAPlayer");
+        }
+        else if (gameObject.layer == LayerMask.NameToLayer("TeamBPlayerNoTerrain")) {
+            gameObject.layer = LayerMask.NameToLayer("TeamBPlayer");
         }
     }
 
@@ -150,8 +198,8 @@ public class Player : MonoBehaviour {
             player_collider.bounds.center.x - player_collider.bounds.extents.x + 0.1f,
             player_collider.bounds.center.y - player_collider.bounds.extents.y - 0.01f);
 
-        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.down, 0.1f);
-        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.down, 0.1f);
+        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.down, 0.01f);
+        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.down, 0.01f);
         Debug.DrawRay(collider_right_corner, Vector2.down * 0.1f);
         Debug.DrawRay(collider_left_corner, Vector2.down * 0.1f);
         if (right_hit.collider != null) {
@@ -160,5 +208,28 @@ public class Player : MonoBehaviour {
             return left_hit.collider.gameObject;
         }
         return null;
+    }
+
+    GameObject getTerrainAbove() {
+        RaycastHit2D right_hit, left_hit;
+        Vector2 collider_right_corner = new Vector2(
+            player_collider.bounds.center.x + player_collider.bounds.extents.x - 0.1f,
+            player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.5f);
+
+        Vector2 collider_left_corner = new Vector2(
+            player_collider.bounds.center.x - player_collider.bounds.extents.x + 0.1f,
+            player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.5f);
+
+        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.up, 0.01f);
+        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.up, 0.01f);
+        Debug.DrawRay(collider_right_corner, Vector2.up * 0.1f);
+        Debug.DrawRay(collider_left_corner, Vector2.up * 0.1f);
+        if (right_hit.collider != null) {
+            return right_hit.collider.gameObject;
+        } else if (left_hit.collider != null) {
+            return left_hit.collider.gameObject;
+        }
+        return null;
+
     }
 }
