@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour {
 	float minY;
 	float maxY;
 	public float minCamSize=8.0f;
+	public float maxCamSize=14.0f;
 	float cameraSpeed=1.5f;
 	float camSize;
 	float delay =0.05f;
@@ -125,6 +126,8 @@ public class CameraFollow : MonoBehaviour {
 		camSize = sizeX >= sizeY ? sizeX : sizeY;
 		if (camSize < minCamSize)
 			camSize = minCamSize;
+		if (camSize > maxCamSize)
+			camSize = maxCamSize;
 
 		cameraMain.orthographicSize = Mathf.Lerp(cameraMain.orthographicSize,camSize*0.6f,delay*cameraSpeed) ;
 		return camSize * 0.6f;
