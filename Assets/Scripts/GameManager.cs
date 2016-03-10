@@ -232,6 +232,10 @@ public class GameManager : MonoBehaviour {
 
     public void winTheGame(PlayerManager pm) {
         PlayerPrefs.SetInt("winner", pm.player_id);
+        PlayerPrefs.SetInt("p1score", players[0].Score);
+        PlayerPrefs.SetInt("p2score", players[1].Score);
+        PlayerPrefs.SetInt("p3score", players[2].Score);
+        PlayerPrefs.SetInt("p4score", players[3].Score);
         SceneManager.LoadScene("_Scene_End");
     }
 

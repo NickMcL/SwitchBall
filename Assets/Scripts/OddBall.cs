@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class OddBall : MonoBehaviour {
+    public GameObject burstPrefab;
 
     public Vector3[] spawnLocations;
 
@@ -10,7 +11,6 @@ public class OddBall : MonoBehaviour {
     public GameObject playerColliderObject;
     
 	CircleCollider2D playerCollider;
-
 
     private PlayerManager _belongTo;
 
@@ -37,6 +37,9 @@ public class OddBall : MonoBehaviour {
         this.BelongTo = null;
         this.GetComponent<CircleCollider2D>().enabled = true;
 		this.transform.GetChild(0).GetComponent<CircleCollider2D> ().enabled = true;
+
+        GameObject burst = Instantiate(burstPrefab) as GameObject;
+        burst.GetComponent<Transform>().position = pos;
 
 
     }
