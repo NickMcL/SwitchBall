@@ -12,7 +12,8 @@ public class Countdown : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (Input.anyKey&&!call)
-        {   
+        {
+            this.GetComponent<Text>().fontSize = 240;
             StartCoroutine(count());
         }
 	
@@ -20,21 +21,12 @@ public class Countdown : MonoBehaviour {
 
     IEnumerator count() {
         call = true;
-        while (start !=-1) {
-           
-            Debug.Log(start);
-           
-            if(start==0)
-                this.gameObject.GetComponent<Text>().text = "Ready";
-            else this.gameObject.GetComponent<Text>().text = start.ToString();
+        while (start !=0) {
+            this.gameObject.GetComponent<Text>().text = start.ToString();
 
             yield return new WaitForSeconds(1);
             start--;
-
-
-
         }
-        if (start == -1)
-            SceneManager.LoadScene("Scene_Main");
+        if (start == 0) SceneManager.LoadScene("Scene_Main");
     }
 }
