@@ -16,7 +16,7 @@ public class restart : MonoBehaviour {
         Vector4 color = new Vector4(1.0f, 1.0f, 1.0f, alphavalue);
         content.color = color;
         if (Input.GetKeyDown(KeyCode.R)) {
-            SceneManager.LoadScene("Scene_Main");
+            SceneManager.LoadScene("_Scene_Menu");
         }
     }
 }
