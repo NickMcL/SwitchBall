@@ -21,26 +21,42 @@ public class GamePadInput : MonoBehaviour {
 
     public float getLeftStickX(int player) {
         //return Input.GetAxis("Microsoft_" + (player + 1) + "_Left_Joy_Horizontal");
-        return InputManager.Devices[player].LeftStickX.Value;
+        print(InputManager.Devices[0].Meta);
+        if (player < InputManager.Devices.Count) {
+            return InputManager.Devices[player].LeftStickX.Value;
+        }
+        return 0f;
     }
 
     public float getRightStickX(int player) {
         //return Input.GetAxis("Microsoft_" + (player + 1) + "_Right_Joy_Horizontal");
-        return InputManager.Devices[player].RightStickX.Value;
+        if (player < InputManager.Devices.Count) {
+            return InputManager.Devices[player].RightStickX.Value;
+        }
+        return 0f;
     }
 
     public float getRightStickY(int player) {
         //return Input.GetAxis("Microsoft_" + (player + 1) + "_Right_Joy_Vertical");
-        return InputManager.Devices[player].RightStickY.Value;
+        if (player < InputManager.Devices.Count) {
+            return InputManager.Devices[player].RightStickY.Value;
+        }
+        return 0f;
     }
 
     public bool rightBumperPressed(int player) {
         //return Input.GetAxis("Microsoft_" + (player + 1) + "_Right_Trigger");
-        return InputManager.Devices[player].RightBumper.IsPressed;
+        if (player < InputManager.Devices.Count) {
+            return InputManager.Devices[player].RightBumper.IsPressed;
+        }
+        return false;
     }
 
     public bool leftBumperPressed(int player) {
         //return Input.GetAxis("Microsoft_" + (player + 1) + "_Left_Trigger");
-        return InputManager.Devices[player].LeftBumper.IsPressed;
+        if (player < InputManager.Devices.Count) {
+            return InputManager.Devices[player].LeftBumper.IsPressed;
+        }
+        return false;
     }
 }

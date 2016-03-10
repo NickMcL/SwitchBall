@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-Build from FRIEDRICE-PC at 3/10/2016 6:16:07 AM
-=======
-Build from Nicole’s MacBook Pro at 03/10/2016 04:37:11
->>>>>>> d1b5ffda2cee3e0ce38122240da2bddce0ff6d9b
+Build from FRIEDRICE-PC at 3/10/2016 6:29:47 AM
