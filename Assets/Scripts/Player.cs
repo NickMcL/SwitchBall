@@ -71,9 +71,7 @@ public class Player : MonoBehaviour {
         updateMovement();
         updateJump();
         moveWithPlatform();
-        if (inAir) {
-            checkPassingThroughPlatform();
-        }
+        checkPassingThroughPlatform();
     }
 
     void updateMovementValuesBasedOnTeam() {
@@ -138,7 +136,7 @@ public class Player : MonoBehaviour {
 
     void moveWithPlatform() {
         GameObject terrain_below = getTerrainBelow();
-        if (terrain_below != null && terrain_below.tag == "Platform") {
+        if (terrain_below != null && (terrain_below.tag == "Platform" || terrain_below.tag == "Sign")) {
             this.transform.parent = terrain_below.transform;
         } else {
             this.transform.parent = null;
@@ -148,19 +146,28 @@ public class Player : MonoBehaviour {
     void checkPassingThroughPlatform() {
         GameObject terrain_above = getTerrainAbove();
         GameObject terrain_below = getTerrainBelow();
-        if (passing_through_platform == null && terrain_above != null &&
-                (terrain_above.tag == "LevelTerrain" || terrain_above.tag == "Platform")) {
-            passing_through_platform = terrain_above;
-            changeLayerToNotHitTerrain();
-            return;
-        }
 
         if (passing_through_platform != null && !(
-                (terrain_above != null && (terrain_above.tag == "LevelTerrain" || terrain_above.tag == "Platform")) ||
-                (terrain_below != null && (terrain_below.tag == "LevelTerrain" || terrain_below.tag == "Platform")) ||
+                (terrain_above != null && terrain_above == passing_through_platform) ||
+                (terrain_below != null && terrain_below == passing_through_platform) ||
                 (player_collider.bounds.Intersects(passing_through_platform.GetComponent<BoxCollider2D>().bounds)))) {
+            Physics2D.IgnoreCollision(player_collider, passing_through_platform.GetComponent<BoxCollider2D>(), false);
             passing_through_platform = null;
             changeLayerToHitTerrain();
+        }
+
+        if (passing_through_platform == null && terrain_above != null &&
+                (terrain_above.tag == "LevelTerrain" || terrain_above.tag == "Platform")) {
+            Physics2D.IgnoreCollision(player_collider, terrain_above.GetComponent<BoxCollider2D>(), true);
+            passing_through_platform = terrain_above;
+            changeLayerToNotHitTerrain();
+        }
+
+        if (passing_through_platform != null && terrain_above != null && terrain_above != passing_through_platform &&
+                (terrain_above.tag == "LevelTerrain" || terrain_above.tag == "Platform")) {
+            Physics2D.IgnoreCollision(player_collider, passing_through_platform.GetComponent<BoxCollider2D>(), false);
+            Physics2D.IgnoreCollision(player_collider, terrain_above.GetComponent<BoxCollider2D>(), true);
+            passing_through_platform = terrain_above;
         }
     }
 
