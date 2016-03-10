@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     public List<Vector3> startPosition;
     public float respawn_time;
     public int winning_score;
+    public int score_per_tick = 2;
 
     //for test
     public GameObject swap;
@@ -162,37 +163,14 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
-        int mode_bonus = 0, nonscoring_players = 0;
-        PlayerManager ball_player = null;
-        if (Mode == gameType.FFA) {
-            mode_bonus = 3;
-        } else if (Mode == gameType.TvT) {
-            mode_bonus = 2;
-        } else if (Mode == gameType.OvT) {
-            mode_bonus = 1;
-        }
-
         foreach (PlayerManager pm in players) {
             if (pm == OddBall.Instance.BelongTo) {
-                pm.Score += 1 + mode_bonus;
-                ball_player = pm;
-            } else if (pm.Team == OddBall.Instance.BelongTo.Team) {
-                pm.Score += mode_bonus;
-            } else {
-                ++nonscoring_players;
+                pm.Score += score_per_tick;
             }
 
             if (pm.Score >= winning_score) {
                 pm.Score = winning_score;
                 winTheGame(pm);
-            }
-        }
-
-        if (nonscoring_players == (playergo.Capacity - 1) && Mode == gameType.OvT) {
-            ball_player.Score += 2;
-            if (ball_player.Score >= winning_score) {
-                ball_player.Score = winning_score;
-                winTheGame(ball_player);
             }
         }
     }

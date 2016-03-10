@@ -227,10 +227,10 @@ public class Player : MonoBehaviour {
             player_collider.bounds.center.x - player_collider.bounds.extents.x + 0.1f,
             player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.1f);
 
-        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.up, 0.5f);
-        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.up, 0.5f);
-        Debug.DrawRay(collider_right_corner, Vector2.up * 0.5f);
-        Debug.DrawRay(collider_left_corner, Vector2.up * 0.5f);
+        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.up, 1f);
+        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.up, 1f);
+        Debug.DrawRay(collider_right_corner, Vector2.up * 1f);
+        Debug.DrawRay(collider_left_corner, Vector2.up * 1f);
         if (right_hit.collider != null) {
             return right_hit.collider.gameObject;
         } else if (left_hit.collider != null) {
