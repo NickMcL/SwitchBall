@@ -104,7 +104,7 @@ public class Player : MonoBehaviour {
     }
 
     void updateJump() {
-        if (getTerrainBelow() != null && rigid.velocity.y <= 0.2f) {
+        if (getTerrainBelow() != null && rigid.velocity.y <= 0.2f && passing_through_platform == null) {
             inAir = false;
         }
         if (pad_state.Triggers.Right < 0.1f) {
@@ -118,11 +118,11 @@ public class Player : MonoBehaviour {
 			right_trigger_down = true;
 		}
 
-		if ((useController && jump_reset && right_trigger_down) && (!inAir)) {
+		if ((useController && jump_reset && right_trigger_down) && !inAir) {
             jump();
             has_triggered = true;
             jump_reset = false;
-        } else if (Input.GetKeyDown(JUMP_KEY) && (!inAir)) {
+        } else if (Input.GetKeyDown(JUMP_KEY) && !inAir) {
             jump();
         }
         right_trigger_down = false;
@@ -221,16 +221,16 @@ public class Player : MonoBehaviour {
         RaycastHit2D right_hit, left_hit;
         Vector2 collider_right_corner = new Vector2(
             player_collider.bounds.center.x + player_collider.bounds.extents.x - 0.1f,
-            player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.5f);
+            player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.1f);
 
         Vector2 collider_left_corner = new Vector2(
             player_collider.bounds.center.x - player_collider.bounds.extents.x + 0.1f,
-            player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.5f);
+            player_collider.bounds.center.y + player_collider.bounds.extents.y + 0.1f);
 
-        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.up, 0.01f);
-        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.up, 0.01f);
-        Debug.DrawRay(collider_right_corner, Vector2.up * 0.1f);
-        Debug.DrawRay(collider_left_corner, Vector2.up * 0.1f);
+        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.up, 0.5f);
+        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.up, 0.5f);
+        Debug.DrawRay(collider_right_corner, Vector2.up * 0.5f);
+        Debug.DrawRay(collider_left_corner, Vector2.up * 0.5f);
         if (right_hit.collider != null) {
             return right_hit.collider.gameObject;
         } else if (left_hit.collider != null) {
