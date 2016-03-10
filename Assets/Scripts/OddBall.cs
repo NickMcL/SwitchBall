@@ -9,7 +9,7 @@ public class OddBall : MonoBehaviour {
     public static OddBall Instance;
 
     public GameObject playerColliderObject;
-    
+
 	CircleCollider2D playerCollider;
 
     private PlayerManager _belongTo;
@@ -22,6 +22,9 @@ public class OddBall : MonoBehaviour {
 
     void Awake() {
         Instance = this;
+    }
+
+    void Start() {
         Initial();
     }
 
@@ -40,8 +43,7 @@ public class OddBall : MonoBehaviour {
 
         GameObject burst = Instantiate(burstPrefab) as GameObject;
         burst.GetComponent<Transform>().position = pos;
-
-
+        GameManager.Instance.current_spree = 0;
     }
 
     public void OnHitPlayer(PlayerManager pm) {
@@ -54,7 +56,6 @@ public class OddBall : MonoBehaviour {
         OddBall.Instance.transform.localPosition = new Vector3(-0.1f, 4.5f, 0f);
 		AudioSource GrabGold = this.GetComponent<AudioSource>();
 		GrabGold.Play();
-
     }
 
     void setupColor() {
@@ -64,5 +65,4 @@ public class OddBall : MonoBehaviour {
             this.GetComponent<SpriteRenderer>().color = TeamColors.TEAM_COLOR_MAP[BelongTo.Team];
         }*/
     }
-
 }

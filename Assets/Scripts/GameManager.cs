@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour {
     public List<Vector3> startPosition;
     public float respawn_time;
     public int winning_score;
-    public int score_per_tick = 2;
+    public int score_per_tick = 1;
+    public int current_spree;
 	AudioSource sound;
 
     //for test
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour {
     public List<PlayerManager> players;
 	[SerializeField]
 	public List<GameObject> playeringame;
+    public GameObject onscreen_text;
     //Which team holds the ball
 
     // Use this for initialization
@@ -49,12 +51,14 @@ public class GameManager : MonoBehaviour {
             Controls.SetMicrosoftMappings();
         }
         Debug.Log(SystemInfo.operatingSystem);
+        onscreen_text.GetComponent<TextMesh>().text = SystemInfo.operatingSystem;
     }
 
     void Start() {
         InitiateTeams();
         InitiatePlayers(startType);
         InvokeRepeating("UpdateScore", 1f, 1f);
+        current_spree = 0;
     }
 
     // Update is called once per frame
@@ -160,6 +164,7 @@ public class GameManager : MonoBehaviour {
 
     //Update the score
     void UpdateScore() {
+        int close_to_winning = 0;
         if (OddBall.Instance.BelongTo == null) {
             return;
         }
@@ -168,7 +173,9 @@ public class GameManager : MonoBehaviour {
 			if (pm == OddBall.Instance.BelongTo) {
 				pm.Score += score_per_tick;
 				pm.currentStreak += score_per_tick;
-				Announcer.
+                ++current_spree;
+                Announcer.S.announceStreaks(pm, current_spree);
+
 			} else {
 				pm.currentStreak = 0;
 			}
@@ -176,6 +183,13 @@ public class GameManager : MonoBehaviour {
                 pm.Score = winning_score;
                 winTheGame(pm);
             }
+            if (pm.Score >= winning_score - 10) {
+                ++close_to_winning;
+            }
+        }
+
+        if (close_to_winning > 1) {
+            Announcer.S.announceCloseGame();
         }
     }
 

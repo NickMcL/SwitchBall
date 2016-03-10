@@ -41,7 +41,6 @@ public class PlayerManager : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll) {
 		if (coll.gameObject.tag == "Boundary") {
-
 			visible = false;
 			death = true;
 			Invoke("respawn", GameManager.Instance.respawn_time);
@@ -49,14 +48,13 @@ public class PlayerManager : MonoBehaviour {
 		if (coll.gameObject.tag == "CameraBoundary") {
 			visible = false;
 			if (OddBall.Instance.BelongTo == this) {
-				OddBall.Instance.Initial ();
-
+                Announcer.S.announceBallDropped();
+                OddBall.Instance.Initial();
 			}
 		}
         if (coll.gameObject.tag == "OddBall") {
 			Camera.main.GetComponent<CameraFollow>().onHitOddBall(this);
 			OddBall.Instance.OnHitPlayer(this);
-
         }
         if (coll.gameObject.tag == "Bullet") {
             Bullet hit_bullet = coll.gameObject.GetComponent<Bullet>();
@@ -66,6 +64,7 @@ public class PlayerManager : MonoBehaviour {
             }
 
             if (OddBall.Instance.BelongTo == this) {
+                Announcer.S.announceBallDropped();
                 OddBall.Instance.Initial();
             }
 			AudioSource bulletHit = GameObject.Find("BulletHitSound").GetComponent<AudioSource>();

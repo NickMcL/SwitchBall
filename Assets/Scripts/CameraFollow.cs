@@ -42,9 +42,6 @@ public class CameraFollow : MonoBehaviour {
 		Instance = this;
 		cameraMain = Camera.main;
 		cameraTx = cameraMain.transform;
-
-	
-
 	}
 
 
@@ -72,8 +69,7 @@ public class CameraFollow : MonoBehaviour {
 		minY = Mathf.Infinity;
 		maxY = -Mathf.Infinity;
 
-	foreach (GameObject player in GameManager.Instance.playeringame ) {
-			
+        foreach (GameObject player in GameManager.Instance.playeringame ) {
 			Vector3 pos = player.transform.position;
 			if (!player.GetComponent<PlayerManager>().visible)
 				continue;
@@ -87,15 +83,14 @@ public class CameraFollow : MonoBehaviour {
 			if (pos.y > maxY)
 				maxY = pos.y;
 		}
-		if (oddPos.x < minX)
-			minX = oddPos.x;
-		if (oddPos.x > maxX)
-			maxX = oddPos.x;
-		if (oddPos.y < minY)
-			minY = oddPos.y;
-		if (oddPos.y > maxY)
-			maxY = oddPos.y;
-	
+        if (oddPos.x < minX)
+            minX = oddPos.x;
+        if (oddPos.x > maxX)
+            maxX = oddPos.x;
+        if (oddPos.y < minY)
+            minY = oddPos.y;
+        if (oddPos.y > maxY)
+            maxY = oddPos.y;
 	}
 	float  positionCamera(){
 		float sizeX, sizeY;
