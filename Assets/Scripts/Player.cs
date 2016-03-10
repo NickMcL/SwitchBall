@@ -5,8 +5,8 @@ using XInputDotNetPure;
 public class Player : MonoBehaviour {
     static float[] MOVE_PENALTY_PER_TEAMMATE_TOTAL = {
         1.0f,
-        0.88f,
-        0.75f
+        0.8f,
+        0.6f
     };
 
     const KeyCode MOVE_LEFT_KEY = KeyCode.A;
