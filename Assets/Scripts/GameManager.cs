@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public float respawn_time;
     public int winning_score;
     public int score_per_tick = 2;
+	AudioSource sound;
 
     //for test
     public GameObject swap;
@@ -164,10 +165,13 @@ public class GameManager : MonoBehaviour {
         }
 
         foreach (PlayerManager pm in players) {
-            if (pm == OddBall.Instance.BelongTo) {
-                pm.Score += score_per_tick;
-            }
-
+			if (pm == OddBall.Instance.BelongTo) {
+				pm.Score += score_per_tick;
+				pm.currentStreak += score_per_tick;
+				Announcer.
+			} else {
+				pm.currentStreak = 0;
+			}
             if (pm.Score >= winning_score) {
                 pm.Score = winning_score;
                 winTheGame(pm);

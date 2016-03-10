@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviour {
 	public bool visible;
     public bool death;
     public bool change;
+	public int currentStreak;
 
     public Vector3 StartPosition { get; set; }
 
