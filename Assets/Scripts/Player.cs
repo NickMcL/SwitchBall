@@ -146,9 +146,6 @@ public class Player : MonoBehaviour {
     void checkPassingThroughPlatform() {
         GameObject terrain_above = getTerrainAbove();
         GameObject terrain_below = getTerrainBelow();
-        if (passing_through_platform != null) {
-            print(passing_through_platform);
-        }
 
         if (passing_through_platform != null && !(
                 (terrain_above != null && terrain_above == passing_through_platform) ||
