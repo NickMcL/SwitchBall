@@ -16,7 +16,7 @@ public class playerScore : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         player = GameManager.Instance.playeringame[playerid];
-        int score = player.GetComponent<PlayerManager>().Score;
+		int score = player.GetComponent<PlayerManager>()._score;
         this.GetComponent<Text>().text = score.ToString();
         if (GameManager.Instance.Mode == GameManager.gameType.FFA) {
             this.GetComponent<Text>().color = TeamColors.TEAM_COLOR_MAP[GameManager.TeamType.NONE];

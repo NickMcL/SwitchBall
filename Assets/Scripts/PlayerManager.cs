@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 
-	private int  _score;
+	public int  _score;
     private GameManager.TeamType _team;
     private SpriteRenderer render;
     public int player_id;
