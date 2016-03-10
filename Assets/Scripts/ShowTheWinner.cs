@@ -6,7 +6,7 @@ public class ShowTheWinner : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		this.GetComponent<Text>().text="player  "+(PlayerPrefs.GetInt("winner")+1)+"  wins";
+		this.GetComponent<Text>().text="Player  "+(PlayerPrefs.GetInt("winner")+1)+"  wins!";
 	}
 	
 	// Update is called once per frame
