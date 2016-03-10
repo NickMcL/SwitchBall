@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using XInputDotNetPure;
 
 public class Player : MonoBehaviour {
     static float[] MOVE_PENALTY_PER_TEAMMATE_TOTAL = {
@@ -33,7 +32,6 @@ public class Player : MonoBehaviour {
     Vector2 platform_below_velocity;
     BoxCollider2D player_collider;
     PlayerManager pm;
-    GamePadState pad_state;
 
     // Use this for initialization
     void Start() {
@@ -52,10 +50,6 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
-		if (SystemInfo.operatingSystem.StartsWith("Windows")) {
-	        pad_state = GamePad.GetState((PlayerIndex) player);
-		}
-
         if (this.GetComponent<PlayerManager>().death || CameraFollow.Instance.zoom) {
             return;
         }
@@ -83,7 +77,8 @@ public class Player : MonoBehaviour {
     void updateMovement() {
         float x_direction = 0f;
         if (useController) {
-            x_direction = pad_state.ThumbSticks.Left.X;
+            //x_direction = pad_state.ThumbSticks.Left.X;
+            x_direction = GamePadInput.S.getLeftStickX(player);
             if (Mathf.Abs(x_direction) < 0.5f) {
                 x_direction = 0.0f;
             }
@@ -107,16 +102,15 @@ public class Player : MonoBehaviour {
         if (getTerrainBelow() != null && rigid.velocity.y <= 0.2f && passing_through_platform == null) {
             inAir = false;
         }
-        if (pad_state.Triggers.Right < 0.1f) {
+        if (!GamePadInput.S.rightBumperPressed(player)) {
             if (!jump_reset && rigid.velocity.y > 1.0f) {
                 //rigid.velocity = new Vector2(rigid.velocity.x, 0f);
                 rigid.AddForce(Vector2.down * rigid.velocity.y * 0.6f, ForceMode2D.Impulse);
             }
             jump_reset = true;
-        }
-		if (pad_state.Triggers.Right > 0.1f) {
+        } else {
 			right_trigger_down = true;
-		}
+        }
 
 		if ((useController && jump_reset && right_trigger_down) && !inAir) {
             jump();
@@ -205,8 +199,8 @@ public class Player : MonoBehaviour {
             player_collider.bounds.center.x - player_collider.bounds.extents.x + 0.1f,
             player_collider.bounds.center.y - player_collider.bounds.extents.y - 0.01f);
 
-        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.down, 0.01f);
-        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.down, 0.01f);
+        right_hit = Physics2D.Raycast(collider_right_corner, Vector2.down, 0.1f);
+        left_hit = Physics2D.Raycast(collider_left_corner, Vector2.down, 0.1f);
         Debug.DrawRay(collider_right_corner, Vector2.down * 0.1f);
         Debug.DrawRay(collider_left_corner, Vector2.down * 0.1f);
         if (right_hit.collider != null) {

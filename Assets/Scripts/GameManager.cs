@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour {
     public List<PlayerManager> players;
 	[SerializeField]
 	public List<GameObject> playeringame;
-    public GameObject onscreen_text;
     //Which team holds the ball
 
     // Use this for initialization
@@ -51,7 +50,6 @@ public class GameManager : MonoBehaviour {
             Controls.SetMicrosoftMappings();
         }
         Debug.Log(SystemInfo.operatingSystem);
-        onscreen_text.GetComponent<TextMesh>().text = SystemInfo.operatingSystem;
     }
 
     void Start() {

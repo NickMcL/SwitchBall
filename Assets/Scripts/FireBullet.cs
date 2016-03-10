@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using XInputDotNetPure;
 
 public class FireBullet : MonoBehaviour {
     const KeyCode FIRE_LEFT_KEY = KeyCode.LeftArrow;
@@ -25,7 +24,6 @@ public class FireBullet : MonoBehaviour {
     Object swap_attack_prefab;
     Vector2 fire_bullet_vector;
     Coroutine fire_bullets;
-    GamePadState pad_state;
 
     // Use this for initialization
     void Start() {
@@ -44,9 +42,6 @@ public class FireBullet : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (SystemInfo.operatingSystem.StartsWith("Windows")) {
-            pad_state = GamePad.GetState((PlayerIndex)player);
-        }
         if (this.GetComponent<PlayerManager>().death == true) {
             return;
         }
@@ -61,8 +56,8 @@ public class FireBullet : MonoBehaviour {
         float y_look_val;
         bool fire_delay_exceeded = (Time.time - stop_bullet_fire_time) >= fire_bullet_delay;
 
-        x_look_val = pad_state.ThumbSticks.Right.X;
-        y_look_val = pad_state.ThumbSticks.Right.Y;
+        x_look_val = GamePadInput.S.getRightStickX(player);
+        y_look_val = GamePadInput.S.getRightStickY(player);
 
         if (player_comp.useController) {
             fire_bullet_vector.x += x_look_val;
@@ -109,7 +104,7 @@ public class FireBullet : MonoBehaviour {
         float cooldown_progress = (Time.time - swap_attack_cooldown_start) / swap_attack_cooldown;
         swap_attack_cooldown_bar.GetComponent<CooldownBar>().setProgress(Mathf.Min(cooldown_progress, 1f));
 
-        if ((!Input.GetKey(SWAP_ATTACK_KEY) && !(pad_state.Triggers.Left > 0.0f)) ||
+        if ((!Input.GetKey(SWAP_ATTACK_KEY) && !GamePadInput.S.leftBumperPressed(player)) ||
                 cooldown_progress < 1.0f || fire_bullet_vector == Vector2.zero) {
             return;
         }
