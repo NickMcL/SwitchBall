@@ -24,6 +24,7 @@ public class Player : MonoBehaviour {
 
     public int player;
     public bool useController;
+	public bool macController;
     public bool has_triggered = false;
     public bool right_trigger_down = false;
     public bool jump_reset;
@@ -112,7 +113,7 @@ public class Player : MonoBehaviour {
 			right_trigger_down = true;
         }
 
-		if ((useController && jump_reset && right_trigger_down) && !inAir) {
+		if ((macController && jump_reset && right_trigger_down) && !inAir) {
             jump();
             has_triggered = true;
             jump_reset = false;
