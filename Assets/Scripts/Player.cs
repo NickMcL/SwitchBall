@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
 
     public int player;
     public bool useController;
+	public bool macController;
     public bool has_triggered = false;
     public bool right_trigger_down = false;
     public bool jump_reset;
@@ -55,6 +56,9 @@ public class Player : MonoBehaviour {
 		if (SystemInfo.operatingSystem.StartsWith("Windows")) {
 	        pad_state = GamePad.GetState((PlayerIndex) player);
 		}
+		if (SystemInfo.operatingSystem.StartsWith("Mac")) {
+			macController = true;
+		}
 
         if (this.GetComponent<PlayerManager>().death || CameraFollow.Instance.zoom) {
             return;
@@ -82,12 +86,15 @@ public class Player : MonoBehaviour {
 
     void updateMovement() {
         float x_direction = 0f;
-        if (useController) {
-            x_direction = pad_state.ThumbSticks.Left.X;
-            if (Mathf.Abs(x_direction) < 0.5f) {
-                x_direction = 0.0f;
-            }
-        }
+		if (useController) {
+			x_direction = pad_state.ThumbSticks.Left.X;
+			if (Mathf.Abs (x_direction) < 0.5f) {
+				x_direction = 0.0f;
+			}
+		} 
+		else if (macController) {
+			x_direction = Input.GetAxis(Controls.axes_codes[player, Controls.axis_left_joy_hor]);
+		}
         else {
             bool a = Input.GetKey(MOVE_LEFT_KEY);
             bool d = Input.GetKey(MOVE_RIGHT_KEY);
@@ -107,6 +114,18 @@ public class Player : MonoBehaviour {
         if (getTerrainBelow() != null && rigid.velocity.y <= 0.2f && passing_through_platform == null) {
             inAir = false;
         }
+		if (macController) {
+			if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) < 0.1f) {
+				if (!jump_reset && rigid.velocity.y > 1.0f) {
+					//rigid.velocity = new Vector2(rigid.velocity.x, 0f);
+					rigid.AddForce(Vector2.down * rigid.velocity.y * 0.6f, ForceMode2D.Impulse);
+				}
+				jump_reset = true;
+			}
+			if ((Input.GetAxis(Controls.axes_codes[player, Controls.axis_right_trigger])) > 0.1f) {
+				right_trigger_down = true;
+			}
+		}
         if (pad_state.Triggers.Right < 0.1f) {
             if (!jump_reset && rigid.velocity.y > 1.0f) {
                 //rigid.velocity = new Vector2(rigid.velocity.x, 0f);

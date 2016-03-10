@@ -60,14 +60,16 @@ public class FireBullet : MonoBehaviour {
         float x_look_val;
         float y_look_val;
         bool fire_delay_exceeded = (Time.time - stop_bullet_fire_time) >= fire_bullet_delay;
-
-        x_look_val = pad_state.ThumbSticks.Right.X;
-        y_look_val = pad_state.ThumbSticks.Right.Y;
-
-        if (player_comp.useController) {
-            fire_bullet_vector.x += x_look_val;
-            fire_bullet_vector.y += y_look_val;
-        } else {
+			x_look_val = pad_state.ThumbSticks.Right.X;
+			y_look_val = pad_state.ThumbSticks.Right.Y;
+		if (player_comp.useController) {
+			fire_bullet_vector.x += x_look_val;
+			fire_bullet_vector.y += y_look_val;
+		} else if (player_comp.macController) {
+			x_look_val = Input.GetAxis (Controls.axes_codes [player, Controls.axis_right_joy_hor]);
+			y_look_val = Input.GetAxis (Controls.axes_codes [player, Controls.axis_right_joy_vert]);
+		}
+		else {
             if (Input.GetKey(FIRE_LEFT_KEY)) {
                 fire_bullet_vector.x -= 1;
             }
@@ -108,10 +110,16 @@ public class FireBullet : MonoBehaviour {
     void updateSwapAttack() {
         float cooldown_progress = (Time.time - swap_attack_cooldown_start) / swap_attack_cooldown;
         swap_attack_cooldown_bar.GetComponent<CooldownBar>().setProgress(Mathf.Min(cooldown_progress, 1f));
-
-        if ((!Input.GetKey(SWAP_ATTACK_KEY) && !(pad_state.Triggers.Left > 0.0f)) ||
-                cooldown_progress < 1.0f || fire_bullet_vector == Vector2.zero) {
-            return;
+		if (player_comp.macController) {
+			if ((!Input.GetKey (SWAP_ATTACK_KEY) &&
+			    !(Input.GetAxis (Controls.axes_codes [player, Controls.axis_left_trigger]) > 0.0f)) ||
+			    cooldown_progress < 1.0f || fire_bullet_vector == Vector2.zero) {
+				return;
+			}
+		}
+		else if ((!Input.GetKey(SWAP_ATTACK_KEY) && !(pad_state.Triggers.Left > 0.0f)) ||
+				cooldown_progress < 1.0f || fire_bullet_vector == Vector2.zero) {
+            	return;
         }
 
         GameObject new_swap_attack = Instantiate(swap_attack_prefab) as GameObject;
