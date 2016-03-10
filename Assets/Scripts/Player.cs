@@ -137,7 +137,7 @@ public class Player : MonoBehaviour {
 			right_trigger_down = true;
 		}
 
-		if ((useController && jump_reset && right_trigger_down) && !inAir) {
+		if ((macController && jump_reset && right_trigger_down) && !inAir) {
             jump();
             has_triggered = true;
             jump_reset = false;

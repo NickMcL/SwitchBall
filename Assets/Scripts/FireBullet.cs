@@ -68,6 +68,9 @@ public class FireBullet : MonoBehaviour {
 		} else if (player_comp.macController) {
 			x_look_val = Input.GetAxis (Controls.axes_codes [player, Controls.axis_right_joy_hor]);
 			y_look_val = Input.GetAxis (Controls.axes_codes [player, Controls.axis_right_joy_vert]);
+			fire_bullet_vector.x += x_look_val;
+			fire_bullet_vector.y += y_look_val;
+
 		}
 		else {
             if (Input.GetKey(FIRE_LEFT_KEY)) {
